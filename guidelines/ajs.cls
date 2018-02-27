@@ -117,6 +117,8 @@
 \newcommand{\Firstdate}[1]{\def\@Firstdate{#1}}
 \newcommand{\Seconddate}[1]{\def\@Seconddate{#1}}
 \newcommand{\Reviewauthor}[1]{\def\@Reviewauthor{#1}}
+
+\usepackage{booktabs}
 %% defaults
 \author{Firstname Lastname\\Affiliation}
 \title{Title}

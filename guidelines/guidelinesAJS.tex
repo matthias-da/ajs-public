@@ -6,8 +6,8 @@
 
 %% almost as usual
 \author{Matthias Templ\\ Vienna University of Technology \And 
-        Second Author\\Plus Affiliation}
-\title{A Capitalized Title: Something about a Topic}
+        Second Author\\ Affiliation}
+\title{Guidelines for Submitting a Manuscript to the Austrian Journal of Statistics}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Matthias Templ, Second Author} %% comma-separated
@@ -16,11 +16,16 @@
 
 %% an abstract and keywords
 \Abstract{
-  The abstract of the article in English
-  
+  This guideline of the Austrian Journal of Statistics (AJS) shows the required style of manuscripts submitted to the Austrian Journal of Statistics. We highly recommend
+to follow exactly the provided instructions already at the very
+beginning when writing the paper. The present document can be used
+directly as template. The file named {\tt guidelinesAJS.tex} may be
+obtained from the site \href{https://github.com/matthias-da/ajs-public}{https://github.com/matthias-da/ajs-public}.
+
+Manuscripts submitted without considering the AJS style file will be very likely not sent into review, but declined with possibility for re-submission.
 }
-\Keywords{keywords, comma-separated, not capitalized, \proglang{R}}
-\Plainkeywords{keywords, comma-separated, not capitalized, R} %% without formatting
+\Keywords{keywords, comma-separated, non-capitalized, \proglang{R}}
+\Plainkeywords{keywords, comma-separated, non-capitalized,, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -38,11 +43,11 @@
 %% in the following format:
 \Address{
   Matthias Templ\\
-  Department of Statistics and Probability Theory\\
-  Vienna University of Technology\\
-  A-1040 Vienna, Austria\\
-  E-mail: \email{templ@tuwien.ac.at}\\
-  URL: \url{http://www.statistik.tuwien.ac.at/public/templ}
+  Institue of Data Analysis and Process Design\\
+  Zurich University of Applied Sciences\\
+  CH-8400 Winterthur, Switzerland\\
+  E-mail: \email{matthias.templ@gmail.com}\\
+  URL: \url{https://www.zhaw.ch/de/ueber-uns/person/teml/}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -62,16 +67,13 @@
 
 \section{Introduction}
 
-Besides the general objectives of the Austrian Journal of
-Statistics, this should contain general instructions for
-preparation of manuscripts to be submitted. This \LaTeXe\ file can
-also be used as a template for the setting up of a text to be
-submitted in computer readable form. In any case, use \texttt{pdflatex} to compile your \LaTeX \ file.
 
-The style file of the Austrian Journal of Statsitics uses mainly the style file from the Journal of Statistical Software (JSS) plus minor modifications. We thank Achim Zeileis for his great work on the JSS style file.
+The style file of the Austrian Journal of Statsitics is based on the style file of the Journal of Statistical Software (JSS) including minor modifications. We thank Achim Zeileis for his great work on the JSS style file.
 
+The Austrian Journal of Statistics is freely available over the net. Free and open-source tools used for production of your manuscript are therefore also highly supported. Code to reproduce the figures and tables in manuscripts as well as methods implemented in software can be published as supplementary material. This increases usually the number of 
+downloads of your article.
 
-The Austrian Journal of Statistics is freely available over the net. Free and open-source tools used for production of your manuscript are therefore also highly supported. Manuscripts can also be sent as \texttt{Sweave} \citep[see, e.g.,][]{leisch02} or \texttt{knitr} \citep{yihui13} files.
+After review, final sources can also be sent as \texttt{Sweave} \citep[see, e.g.,][]{leisch02} or \texttt{knitr} \citep{yihui13} .Rnw files.
 
 %Graphics should be inserted as PostScript files using the
 %package {\tt psfig} or {\tt graphicx}. Bibliographic references
@@ -79,149 +81,36 @@ The Austrian Journal of Statistics is freely available over the net. Free and op
 %style.
 
 
-\section{Objectives of the journal}
-
-The journal is published approximately quarterly by the Austrian
-Statistical Society. Its general objective is to promote and
-extend the use of statistical methods in all kind of theoretical
-and applied disciplines. Special emphasis is on methods and
-results in official or governmental statistics.
-
-Original papers and review articles will be published in the
-Austrian Journal of Statistics if judged consistently with these
-general aims. All papers will be refereed.
-
-Special issues will appear from time to time. Each
-section will have as a theme a specialized area of statistical
-application, theory, or methodology.
-
-Technical notes or problems for considerations under Shorter
-Communications are also invited.
-
-One author of each article obtains a free copy of the entire issue
-in which the article is contained. Members of the Austrian
-Statistical Society receive a copy of the Journal free of charge.
-Specific volumes may be purchased from the Society.
-
-Articles will also be made available through the web at 
-\begin{center}
-\href{http://www.ajs.or.at}{http://www.ajs.or.at}
-\end{center}
-
-
-\subsection{Statistics: theory and applications}
-
-The section for {\bf theory} and methods publishes articles that
-make original contributions to the foundations, theoretical
-development, and methodology of statistics and probability. {\em
-Theory and Methods\/} should be interpreted broadly to include all
-techniques relevant to statistics and probability. This may
-include computational and graphical methods as well as more
-traditional mathematical methods. The research reported should be
-motivated by a scientific or practical problem and illustrated by
-application of the proposed methodology to that problem.
-Illustration of techniques with real data is especially welcomed
-and strongly encouraged.
-\medskip
-
-{\bf Applications} and case studies are published if they present
-original articles which
-\begin{list}{$\bullet$}{\setlength{\topsep}{0mm}\setlength{\itemsep}{-1mm}}
- \item show analysis with real data that are statistically
-       innovative as well as scientifically and practically relevant, or
- \item contribute substantially to a scientific field through the
-       use of sound statistical methods, or
- \item present new and useful data, such as a new life table for
-       a segment of the population or a new social or economic
-       indicator, or
- \item using empirical tests, examine or illustrate for an important
-       application the utility of a valuable statistical technique, or
- \item evaluate the quality of important data sources.
-\end{list}
-Note that careful analysis of data of substantive importance may be
-published even there are no methodological innovations.
-
-
-\subsection{Official statistics}
-
-The section for {\bf official statistics} publishes articles which
-deal with conceptual methods and computational issues. The
-different fields covered include
-\begin{list}{$\bullet$}{\setlength{\topsep}{0mm}\setlength{\itemsep}{-1mm}}
- \item population and social statistics
- \item economic statistics
- \item price statistics
- \item regional and urban statistics
- \item economic and social statistics
- \item tourism statistics
- \item research, development and innovation statistics
- \item environmental statistics including environmental accounting and
-       environmental indicators
- \item national accounts including input-output tables and analysis.
-\end{list}
-Especially welcomed are articles which are concerned in
-\begin{list}{$\bullet$}{\setlength{\topsep}{0mm}\setlength{\itemsep}{-1mm}}
- \item statistical disclosure control methods
- \item model-based methods
- \item publication policies (presentation of statistics)
- \item data pre-processing
- \item data visualisation
- \item survey methodology
-\end{list}
-Of course, papers treating national as well as international
-concepts (e.g.~EU-statistics) are of interest.
-
-
-
-\section{Style files for the manuscript}
+\section{Writing your manuscript}
 
 The Journal is produced on the basis of computer readable
 manuscripts provided by the authors. 
 
+
 In order to obtain a uniform layout and to ease the production as
 much as possible it is highly recommended to use \LaTeXe\ for the
-text processing. Graphics should be added in pdf or png format
- at suitable places of the manuscript.
+text processing. 
 
-We highly recommend
-to follow exactly the provided instructions already at the very
-beginning when writing the paper. The present document can be used
-directly as template. The file named {\tt guidelinesAJS.tex} may be
-obtained from the site 
-
-\href{http://www.ajs.or.at/index.php/ajs/about/submissions\#authorGuidelines}{http://www.ajs.or.at/index.php/ajs/about/submissions\#authorGuidelines}
-
-Please consider title case for titles and for references. Sentence case for  sections and subsections.
-
-\subsection{Submission}
-
-A manuscript should be submitted to
-\begin{center}
-\href{http://www.ajs.or.at/index.php/ajs/about/submissions\#onlineSubmissions}{http://www.ajs.or.at/index.php/ajs/about/submissions\#onlineSubmissions}
-\end{center}
-
-in
-electronic form following the editorial system. For further questions for submission and on the editorial system, send an e-mail to \href{templ@statistik.tuwien.ac.at}{templ@statistik.tuwien.ac.at}.
-
-
-\subsection{Formal configuration}
-
-Each article must have a summary in English and German which
+Each article must have a summary in English which
 inform the reader quickly on the contents and the substantial
-results. The length surely depends on the contents, however, it
-should not exceed 150 words. Mathematical formulas and references should be
+results. The length surely depends on the contents. 
+Mathematical formulas and references should be
 avoided in the summary.
 
 Headings and footings as well as pagination will be added during
-the production. Footnotes should be avoided as much as possible.
+the production. Footnotes should be avoided.
 
 The article should be structured by enumerated sections and
 subsections. The title should be in title case style, sections and subsections in section case style. Graphics and tables must contain captions, above
-tables and below graphics (figures). Examples are (see Figure~\ref{Fig3.4} and Table~\ref{Tab3.4})
+tables and below graphics (figures). Examples are (see Figure~\ref{Fig3.4} and Table~\ref{Tab3.4}).
+Graphics \textbf{should be produced in \textbf{pdf} format} and included 
+ at suitable places of the manuscript. 
 
 \begin{figure}[hbt]
-\centerline{\sl Here should be a graphic using the includegraphics command (pdf or png format).}
-\caption{\label{Fig3.4}The caption of the figure to be filled in.} 
+\begin{center}
+\includegraphics{ajs-download20180210}
+\caption{\label{Fig3.4}Download statistics of articles per month at the Austrian Journal of Statistics.} 
+\end{center}
 \end{figure}
 
 \begin{table}[hbt]
@@ -230,7 +119,8 @@ tables and below graphics (figures). Examples are (see Figure~\ref{Fig3.4} and T
 \small
 \hspace{1.5cm}
 \begin{center}
-\begin{tabular}{llllllll}
+\begin{tabular}{|llllllll|}
+\toprule
 70.0 & 68.6 & 67.9 & 66.3 & 71.0 & 64.2 & 69.6 & 71.0\\
 ... & ... & ... & ... & ... & ... & ... & ...\\
 %69.7 & 69.0 & 73.4 & 69.0 & 70.1 & 69.8 & 69.0 & 73.0\\
@@ -241,18 +131,26 @@ tables and below graphics (figures). Examples are (see Figure~\ref{Fig3.4} and T
 %68.6 & 68.5-& 67.8 & 72.2 & 68.7 & 70.6 & 66.9 & 69.3\\
 %71.4 & 68.7 & 74.2 & 68.8 & 71.4 & 71.8 & 67.5-& 70.4\\
 %71.4 & 67.4 & 69.5-& 72.4 & 70.4 & 69.3 & 68.2 & 67.0\\
-71.7 & 70.5+& 72.5-& 68.2 & 67.6 & 68.6 & 70.5-& 65.8
-\vspace*{-5mm}
+71.7 & 70.5+& 72.5-& 68.2 & 67.6 & 68.6 & 70.5-& 65.8\\
+\bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
 Mathematical formulas should be enumerated as far as they are
-referenced. E.g.~Equation~(\ref{form3.1}) shows the density ...
+referenced \textbf{only}. E.g.~Equation~(\ref{form3.1}) shows the density 
 \begin{equation}\label{form3.1}
 f(x) =
 \frac1{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\,.
 \end{equation}
+
+Please consider 
+
+\begin{itemize}
+\item  capitalized title case for titles and for all references and 
+\item sentence, non-capitalized case for sections and subsections.
+\end{itemize}
+
 
 Cited literature should be summarized at the end of the article in
 form of a non-enumerated section. \cite{leisch02} is a reference
@@ -266,9 +164,14 @@ of the manuscript.
 
 \section{Submission and refereeing}
 
+
+\subsection{Submission}
+
 Consideration of the previously stated rules are of great help for
 the editing process. Whenever technically possible, manuscripts
-should be submitted through the editorial system at \href{www.ajs.or.at}{www.ajs.or.at}.
+should be submitted through the editorial system at \href{www.ajs.or.at}{www.ajs.or.at}. The authors must be registered at this website.
+
+\subsection{Refereing}
 
 All contributions will be anonymously refereed. Cited literature which is
 hardly available should accompany the submitted manuscript. It
@@ -281,11 +184,45 @@ submitted for publication at the same time at another place. It is
 fair that the submitting author notifies if an earlier version has
 already been submitted somewhere before.
 
-Manuscripts stay with the publisher and referees. The refereeing
-and publishing in the Austrian Journal of Statistics is free of
-charge. The publisher, the Austrian Statistical Society requires a
-grant of copyright from authors in order to effectively publish
-and distribute this journal worldwide.
+\subsection{Copyrights and fees}
+
+The Austrian Journal of Statistics is free of
+charge. Generally, we use the Creative Commons Attribution License (CC-BY).
+
+For copyright issues, publication ethics and malpractice statements, please have a look at 
+\href{www.ajs.or.at}{www.ajs.or.at}
+
+
+\section{Checklist}
+
+We list the most common mistakes when submitting manuscripts to the journal and formulate them in form of questions.
+
+\begin{itemize}
+\item Did you upload a pdf of your manuscript for review? (no Word, no .tex, ...)
+\item Did you use the style of AJS?  
+\item Are your graphics produced in pdf format? 
+\item Is your title captialized?
+\item Are the titles of your cited papers in your references capitalized?
+\item Are your section and subsection headers non-capitalized form?
+\item Are your tables produced with \LaTeX ? (no screenshots)
+\item Have you cited the software you used, e.g. R itself and R packages used? To not cite software is plagiarism and violates intellectual properties of the authors of the software.
+\item Did you proposed at least three independent reviewers?
+\end{itemize}
+
+\section{Frequently asked questions}
+
+\noindent 
+\begin{enumerate}
+\item \textit{My citation shows all authors and not the typically shown et al.}. \\ Answer: this is ok. We like to show all authors in the text.
+\item \textit{When I submit a paper, how long does it take to be published} \\ Answer: The average time from submission to publication is approx. 165 days. But it heavily depends if you can make satisfying revisions in time. 
+\item \textit{In which databases is AJS indexed.} \\
+Answer: we are indexed in many of them, most notable is Scopus (from Elsevier). More information can be found at the website of AJS. 
+\item \textit{Can I upload my paper on \href{https://arxiv.org/}{https://arxiv.org/} and distribute before the paper is online at AJS? } \\
+Answer: Of course, you can do it. However, please clearly point out in the header of the paper that this paper is under review in the Austrian Journal of Statistics and will likely be published there. Note that the readers should check if the paper is already be published at AJS for correct citation, i.e. finally the journal should be cited. Update and upload  \href{https://arxiv.org/}{https://arxiv.org/} or similar sites with the final version in AJS style after the paper is published  in AJS. 
+
+\end{enumerate}
+
+
 
 %\bibliographystyle{plainat}
 \bibliography{guidelinesAJS}
