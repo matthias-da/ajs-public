@@ -27,11 +27,13 @@ are addressed in the final version:
   - References are provided in a .bib BibTeX database and included
     in the text by \cite, \citep, \citet, etc.
   - Titles and headers are formatted as described in the guidelines:
-      - \title in title style,
-      - \section etc. in sentence style,
-      - all titles in the BibTeX file in title style.
+      - \title in (capitalized) title style,
+      - \section and \subsections in non-capitalized sentence style,
+      - all titles in the BibTeX file in (capitalized) title style.
   - Figures, tables and equations are marked with a \label and
     referred to by \ref, e.g., "Figure~\ref{...}".
   - Software packes are \cite{}d properly.
 For more details, see the style FAQ at http://www.jstatsoft.org/style
 and the manual guidelinesAJS.pdf.
+
+More information is included in the guidelines.
