@@ -1,0 +1,403 @@
+---
+title: "Advanced Survey Statistics: Disclosure Control"
+subtitle: "Part 5: Anonymisation Methods"
+author: "Matthias Templ"
+date: FU-Berlin, 2019
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+theme_set(theme_grey() + theme(text=element_text(size = 20)))
+```
+
+## Traditional anonymisation methods
+
+We will discuss these standard methods
+
+Methods that recode data or suppress values
+
+- global recoding
+- local suppression
+- microaggregation
+
+Methods that include a probability mechanism
+
+- PRAM
+- adding noise
+
+## Recoding
+
+Recoding categorical key variables:
+
+- achieving anonymity by mapping
+the values of the categorical key variables to generalized
+or altered categories.
+- Example: combine multiple levels of schooling (e.g., secondary, tertiary, postgraduate) into one level (e.g., secondary and above).
+
+Recoding continuous variables 
+
+- means to discretize the variable
+- Example: income to income classes
+
+
+
+## Recoding
+
+Test data from the Philippines (household income data):
+
+```{r, echo = TRUE, message=FALSE, warning=FALSE}
+require("sdcMicro")
+data(testdata, package="sdcMicro")
+testdata$urbrur <- factor(testdata$urbrur)
+testdata$water <- factor(testdata$water)
+testdata$relat <- factor(testdata$relat)
+testdata$walls <- factor(testdata$walls)
+sdc <- createSdcObj(testdata,
+          keyVars=c('urbrur','water','sex','age','relat'), 
+          numVars=c('expend','income','savings'),
+          pramVars=c("walls"), 
+          w='sampling_weight', 
+          hhId='ori_hid', alpha = 0.7)
+summary(testdata$age)
+```
+
+
+## Recoding
+
+```{r, echo=TRUE}
+labs <- c("1-9","10-19","20-29","30-39",
+          "40-49","50-59","60-69","70-79","80-130")
+sdc <- globalRecode(sdc, column="age",
+                    breaks=c(0,9,19,29,39,49,59,69,79,130), 
+                    labels=labs)
+print(sdc)
+```
+
+To combine specific categories use \texttt{groupAndRename}.
+
+## Recoding
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+sdc <- groupAndRename(sdc, var="water", 
+         before=levels(testdata$water), 
+         after=c("1","2","3","4","5","6-9","6-9","6-9"))
+sdc <- groupAndRename(sdc, var="relat", 
+         before=levels(testdata$relat), 
+         after=c("1","2","3","4","5","6","7","8-9","8-9"))
+print(sdc, "kAnon")
+```
+
+
+
+## Top- and Bottom Coding
+
+Top (Bottom) Coding
+
+- continuous variables are cut off by a given upper (lower) threshold 
+- values above (below) are replaced with, e.g., the mean of values above (below) the threshold
+
+```{r, echo = TRUE}
+sdc <- topBotCoding(sdc, value=500000, replacement=500000, 
+                    column="income")
+```
+
+- advantage: easy to explain and thus often applied
+- disadvantage: the highest (lowest) values are then identical
+- extension to the multivariate case: see presentation on Wednesday
+
+## Local suppression
+
+- Typically used after recoding to minimize disclosure risk and establish $k$-anonymity.
+- Heuristic optimization methods to find specific suppression patterns in categorical key variables. 
+- One aim: to \textbf{suppress a minimum amount of values} and in the same time \textbf{guarantee $k$-anonymity}.
+- Additional complexity: frequency counts with missing values.
+- Weight the variables according to their importance (in some variables you may want to end up with less suppresions than in some others)
+
+
+## Local suppression - approaches
+
+\begin{description}
+\item[\textbf{Mondrian}:] combine categories to achieve $k$-anonymity by a recoding strategy based on counts of categories. Too over-simplistic approach, not very promising results because the algorithm combines categories without asking their meaning. 
+\item[\textbf{all-$M$ approach}:] whenever $k$-anonymity cannot be provided because of having too many key variables, then $k$-anonymity is provided in all subsets of size $M$ of the key variables. More precisely, the algorithm will provide $k$-anonymity for each combination of $M$ key variables. 
+\item[\textbf{$k$-anonymity approach}:] ensures $k$-anonymity for the combination of all key variables. If the number of key variables is too high: all-$M$ approach or PRAM (next method to be explained) for specific key variables. 
+\end{description}
+
+## Local suppression
+
+```{r, echo = TRUE}
+# all M approach
+combs <- 5:3
+k <- c(10,20,30)
+sdc <- kAnon(sdc, k = k, combs = combs, 
+             importance = c(3,4,2,1,5)) 
+print(sdc, "ls")
+sdc <- undolast(sdc)
+```
+
+## Local suppression
+
+```{r, echo = TRUE}
+# k-anonymity for all key variables
+sdc <- kAnon(sdc, k = 3, importance = c(3,4,2,1,5)) 
+# print(sdc, "kAnon")
+print(sdc, "ls")
+```
+
+
+
+## kAnon in subsets
+
+Stratification
+
+- The methods can also be applied on each strata separately as long as the strata is specified in \texttt{createSdcObj}.
+- The implemented method in R then ensures $k$-anonymity in all strata.
+
+## PRAM
+
+Especially if the number of categorical key variables is large or many of these variables have a high number of different categories - recoding and local suppression would modify the data too much.
+
+- PRAM is applied to one variable at a time.
+- We swap values between categories with pre-defined probabilities.
+- An attacker can never be sure if a value is true or has been swapped.
+- Probabilities for swapping values are chosen to be small in practice.
+- In practice: often the geographical information is swapped using PRAM
+
+
+## PRAM Example
+
+Consider a variable \textit{location} with categories east, middle, west.
+
+- We define a 3-by-3 transition matrix with $p_{ij}$ the probabilities for swapping category $i$ to $j$. $\sum_{j=1}^3 p_{ij} = 1 \quad , \forall i \in \{1,2,3\}$. 
+- For example, the matrix could look like this:
+
+\[ \mathbf{P} = \left( \begin{array}{ccc}
+0.9 & 0.05 & 0.05 \\
+0.05 & 0.9 & 0.05 \\
+0.05 & 0.05 & 0.9 \end{array} \right)\]
+
+- $\rightarrow$ the probability that a value stays the same is 0.9, because $p_{11}=p_{22}=p_{33}$
+- The probability that east will become middle is $p_{12} = 0.05$
+- ...
+
+## PRAM Example
+
+```{r, echo = TRUE}
+sdc <- pram(sdc) # with standard defaults
+print(sdc, "pram")
+```
+
+How to build an own transition matrix: \texttt{?pram}
+
+
+
+
+## Microaggregation
+
+For continuous key variables. Clustering of observations into groups and replace values with group means.
+ 
+- Observations should be as similar as possible within a group.
+- Problem is NP-hard. Heuristic algorithm: MDAV
+- Assign an aggregated value in each group.
+     * arithmetic mean or e.g. robust means
+- Application typically applied independently in subgroups, eg, independent in all regions.
+- also version for mixed-scaled variables available (Gower)
+
+## Microaggregation Example
+
+Example with aggregation level 2
+
+```{r microaggregation, echo=FALSE}
+library(xtable)
+df <- francdat[,c(1,3,7)]  
+df <- cbind(df, microaggregation(df, aggr=2)$mx)
+colnames(df)[4:6] <- paste("Mic",1:3, sep="")
+df <- xtable(df, digits=c(0,2,3,0,2,2,1), align = "|l|lll|lll|",
+	caption="Example of micro-aggregation. Columns 1-3 contain the original variables, columns 4-6 the micro-aggregated values (rounded on two digits).", 
+	label="listingMicroaggregation")
+```
+
+\begin{small}
+```{r allprint, echo=FALSE, results="asis"}
+print(df,include.rownames = getOption("xtable.include.rownames", TRUE), caption.placement="top")
+```
+\end{small}
+
+
+
+## Example MDAV, 2-dim
+
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-017}
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-018} 
+
+## Example MDAV, 2-dim
+
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-019}
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-020}
+
+## Example MDAV, 2-dim
+
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-022}
+\includegraphics[width=0.45\textwidth]{/Users/teml/workspace/sdc-springer/book/figures/slidesmt-026}
+
+
+## Example microaggregation with R
+
+```{r, echo = TRUE}
+sdc <- microaggregation(sdc, aggr = 3, method="mdav")
+print(sdc, "numrisk")
+```
+
+Risk measure: use it only for comparison
+
+Utility: we will use better measures later on
+
+## Univariate microaggregation
+
+- The individual ranking method (univariate microaggregation) is not recommended to use, but often applied because of its simplicity. 
+- The method replaces values by its aggregates column by column independently.
+- First, the first column is sorted and the index of sorting is memorized to be able to sort the values back in the original order. Then the first $k$ values are replaced by their aggregate (usually the arithmetic mean), the next $k$ values are replaced by their aggregate, and so on, until all values are aggregated from the first variable. The variable is then back-sorted. 
+- This procedure is then applied on the other variables independently. 
+
+Clearly destroys the multivariate structure of the data set.
+
+
+## Univariate microaggregation in R
+
+```{r, echo = TRUE}
+sdc <- undolast(sdc)
+sdc <- microaggregation(sdc, aggr = 3, method="onedims")
+print(sdc, "numrisk")
+```
+
+## Adding uncorrelated (additive) noise
+
+Normal noise:
+
+\begin{equation}
+\mathbf{z}_j = \mathbf{x}_j + \mathbf{\epsilon}_j \quad ,
+\end{equation}
+where vector $\mathbf{x}_j$ represents the original values of variable $j$, $\mathbf{z}_j$ represents the perturbed values of variable $j$ and $\mathbf{\epsilon}_j$ (uncorrelated noise, or white noise) denotes normally distributed errors with $\epsilon_j \sim N(0, c \cdot s_{x_j})$ with $c$ a constant and $s$ the standard deviation, $Cov(\mathbf{\epsilon}_l,\mathbf{\epsilon}_k) = 0$ for all $k \neq l$.
+<!-- In matrix notation this looks like -->
+<!-- \begin{equation} -->
+<!-- \mathbf{Z} = \mathbf{X} + \mathbf{\epsilon} \quad , -->
+<!-- \end{equation} -->
+<!-- with $X \sim (\mu, \Sigma), \ \mathbf{\epsilon} \sim -->
+<!-- N(0,\Sigma_{\epsilon})$ and $\Sigma_{\epsilon} = c \cdot diag(\sigma_1^2, \sigma_2^2, \ldots, \sigma_p^2)$, \ for a constant $c > 0$. -->
+
+Uniform noise: ...
+
+Multiplicative noise: ...
+
+## Adding correlated noise
+
+Often the better choice than uncorrelated noise, because the multivariate structure will not be completely changed.
+
+- The difference to the uncorrelated noise method is that the covariance matrix of the errors is now designed to be proportional to the covariance of the original data, i.e. $\mathbf{\epsilon} \sim N(0,\Sigma_{\epsilon}=c\Sigma_{\mathbf{X}})$. 
+
+- There are several variants of methods available how to achieve this (we will not go into details here)
+
+## Random orthogonal matrix masking
+
+Multiplicative correlated noise
+
+\textbf{R}OMM (\textbf{R}andom \textbf{O}rthogonal \textbf{M}atrix \textbf{M}asking): 
+
+perturbed data are obtained by 
+
+$$\mathbf{Z} = \mathbf{A} \mathbf{X}$$
+
+- whereby $\mathbf{A}$ is randomly generated
+and 
+- fulfils 
+$\mathbf{A}^{-1} = \mathbf{A}^T$
+(orthogonality condition). 
+
+
+## Adding uncorrelated noise in R
+
+
+```{r, echo = TRUE}
+sdc <- undolast(sdc)
+sdc <- addNoise(sdc, noise = 5, method="additive")
+print(sdc, "numrisk")
+```
+
+## Adding correlated noise in R
+
+```{r, echo = TRUE}
+sdc <- undolast(sdc)
+sdc <- addNoise(sdc, noise = 5, method="correlated2")
+print(sdc, "numrisk")
+```
+
+See illustrative figures on tollerance ellipses in the book.
+
+
+## Multiplicative correlated noise (ROMM) in R
+
+Loooong computation time...
+
+```{r, echo = TRUE, eval = FALSE}
+sdc <- undolast(sdc)
+sdc <- addNoise(sdc, noise = 5, method="ROMM")
+```
+
+## Shuffling
+
+Sketch outline of the method:
+
+Regression model: continuous key variables as a response, other variables for predictors
+
+- Swap values based on ranks of expected values and ranks of original values
+- Rank correlations are preserved
+- We do not want to go into more details on shuffling, because 
+    * especially outliers are not perturbed
+    * if the model is weak, the multivariate dependencies are changed a lot (even rank correlation preserves)
+    * a perfect model results in no perturbation
+
+
+## Shuffling in R
+
+
+```{r, eval = TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+sdc <- undolast(sdc)
+sdc <- shuffle(sdc, 
+		form=savings+expend ~ urbrur+walls+water)
+print(sdc, "numrisk")
+```
+
+We should take more care to spedify a good model.
+
+
+## Conclusion so far
+
+What we learned so far
+
+- Legal background on SDC (from an applied statistics perspective)
+- We know methods to specify the discosure risk
+- We are able to apply anonymisation methods
+
+\pause 
+
+What is missing?
+
+- How to evaluate the utility of anonymized data?
+- Choice of anonymization methods depends on the SDC problem and data set. Is there a standardized way of applying methods?
+
+\pause 
+
+What other topics are missing so far?
+
+- Synthetic data simulation $\rightarrow$ if time, we will disuss it during the lecture, otherwise see presentation on Wednesday
+- SDC for tabular data $\rightarrow$ presentation on Wednesday
+
+
+

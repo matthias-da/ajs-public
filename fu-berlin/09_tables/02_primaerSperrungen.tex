@@ -1,0 +1,130 @@
+\section{Identification of unsafe cells}
+\begin{frame}\frametitle{Primary suppressions}
+	\begin{itemize}
+		\item Some rules for determining if a cell is ''unsafe'': \pause
+		\begin{itemize}
+			\item {\bf Frequency rule:} \\ Count of observations contributing to a cell. Unsafe if the count $<$ threshold $k$ (mostly $k$ is 3 or 4) \pause
+			\item {\bf (n,k)-dominance rule:} \\ A cell must be protected if the total of $n$ largest of contributers to a cell is larger than $k\%$ of the total cell value.   \pause
+			\item {\bf p-\% rule:} \\ total minus the sum of the two largest contributers is smaller than  $p \%$ of the largest contributor. (the largest contributor is again dominant) %\pause
+		\end{itemize}
+		%\item Beispiele!
+	\end{itemize}
+	
+The later two rules are similar (but not the same). We will not go into details here.
+\end{frame}
+% 
+% \begin{frame}\frametitle{Primary suppression}
+% 	\begin{itemize}
+% 		\item {\bf Zusammenhang} zwischen (n,k)-Dominanzregel und p-\%-Regel:
+% 		\begin{itemize}
+% 			\item Nach beiden Dominanzregeln m?ssen Zellwerte gesch?tzt werden, wenn ein oberer Sch?tztwert f?r den Wert des gr??ten Beitragenden konstruiert werden kann, der den wahren Wert {\bf nicht genug} ?bersch?tzt.  \pause
+% 			\item Nach der $p-\%$-Regel wird das ''nicht genug'' als Rate ($p\%$) am wahren Wert der gr??ten beitragenden Einheit gemessen. \pause
+% 			\item nach der (n,k)-Dominanzregel wird das ''nicht genug'' als Rate ($100-k$)\% am Zellwert gemessen. \pause
+% 			\item {\bf Ausserdem gilt:}
+% 			\begin{itemize}
+% 				\item jeder Zellwert, der nach der (2,k)-Regel als ''sicher'' gilt, ist auch ''sicher'' nach der $p\%$-Regel.\pause
+% 				\item nicht jeder Zellwert, der nach der $p\%$-Regel als ''sicher'' gilt ist auch ''sicher'' nach der (2,k)-Dominanzregel.\pause
+% 					\item Es gilt f?r den Zusammenhang zwischen p\%-Regel und (2,k)-Regel: $p = 100 \cdot \dfrac{100-k}{k}$
+% 			\end{itemize}
+% 		\end{itemize}
+% 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Prim?rsperrungen}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} 5 Einheiten $F_1, F_2, F_3, F_4$ und $F_5$ tragen zu einer Zelle mit $uF_1=5000, uF_2=4900, uF_3=50, uF_4=30$ und $uF_5=20$ bei. Das Zelltotal ist daher $b_1+b_2+b_3+b_4+b_5=10000$. \pause
+% 		\begin{itemize}
+% 			\item {\bf Fallzahlregel:} \\ Die Anzahl der zur Zelle beitragenden Einheiten ist $5$. Die Zelle ist bei Anwendung der Fallzahlregel mit $n \leq 5$ {\bf nicht} sch?tzenswert. \pause
+% 			\item {\bf (1,90)-Dominanzregel:} \\ Der Gesamtwert der $n=1$ gr??ten Beitragenden ?berschreitet $90 \%$ des Zellwertes nicht: $5000 < (90/100)*10000$. Die Zelle ist daher bei Anwendung der (1,90)-Dominanzregel ''sicher''. \pause \\
+% 			\item {\bf (2,90)-Dominanzregel:} \\ Der Gesamtwert der $n=2$ gr??ten Beitragenden ?berschreitet $90 \%$ des Zellwertes deutlich: $5000+4900 > (90/100)*10000$. Die Zelle muss daher bei Anwendung der (2,90)-Dominanzregel als unsicher markiert werden. \pause
+% 		\end{itemize}
+% 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Prim?rsperrungen}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} 5 Einheiten $F_1, F_2, F_3, F_4$ und $F_5$ tragen zu einer Zelle mit $uF_1=5000, uF_2=4900, uF_3=50, uF_4=30$ und $uF_5=20$ bei. Das Zelltotal ist daher $b_1+b_2+b_3+b_4+b_5=10000$. \pause
+% 		\begin{itemize}
+% 			\item {\bf Fallzahlregel:} \\ Die Anzahl der zur Zelle beitragenden Einheiten ist $5$. Die Zelle ist bei Anwendung der Fallzahlregel mit $n \leq 5$ {\bf nicht} sch?tzenswert. \pause
+% 			\item {\bf (1,90)-Dominanzregel:} \\ Der Gesamtwert der $n=1$ gr??ten Beitragenden ?berschreitet $90 \%$ des Zellwertes nicht: $5000 < (90/100)*10000$. Die Zelle ist daher bei Anwendung der (1,90)-Dominanzregel ''sicher''. \pause \\
+% 			{\bf Aber:} Der zweitgr??te Beitragende kann einen oberen Grenzwert f?r den Beitrag des gr??ten Beitragenden sch?tzen: $\hat{x_1} = 10000 - uF_2 (4900) = 5100$ und ?bersch?tzt damit den wahren Wert um nur 2\%!
+% 		\end{itemize}
+% 	\end{itemize}
+% \end{frame}
+
+
+% \begin{frame}\frametitle{Prim?rsperrungen (Fortsetzung)}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} 5 Einheiten $F_1, F_2, F_3, F_4$ und $F_5$ tragen zu einer Zelle mit $uF_1=5000, uF_2=4900, uF_3=50, uF_4=30$ und $uF_5=20$ bei. Das Zelltotal ist daher $uF_1+uF_2+uF_3+uF_4+uF_5=10000$
+% 		\begin{itemize}
+% 			\item {\bf (2,90)-Dominanzregel:} \\ Der Gesamtwert der $n=2$ gr??ten Beitragenden ?berschreitet $90 \%$ des Zellwertes deutlich: $5000+4900 > (90/100)*10000$. Die Zelle muss daher bei Anwendung der (2,90)-Dominanzregel als unsicher markiert werden. \pause
+% 			\item {\bf p-\% Regel:} \\ Wie die (2,k)-Dominanzregel wird auch bei der p-\% Regel Information ?ber die zwei gr??ten beitragenden Einheiten verwendet. Da
+% 			\[ 1000 - uF_1 - uF_2 = 100 < \frac{p}{100} \cdot uF_1; \quad \forall p \geq 2 \]
+% 			gilt die Zelle nach der p-\% Regel als unsicher f?r alle $p \geq 2$.
+% 		\end{itemize}
+% 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Prim?rsperrungen (Fortsetzung)}
+% 	\begin{itemize}
+% 		\item {\bf Zusammenhang} zwischen (n,k)-Dominanzregel und p-\%-Regel:
+% 		\begin{itemize}
+% 			\item Nach beiden Dominanzregeln m?ssen Zellwerte gesch?tzt werden, wenn ein oberer Sch?tztwert f?r den Wert des gr??ten Beitragenden konstruiert werden kann, der den wahren Wert {\bf nicht genug} ?bersch?tzt.
+% 			\item Nach der $p-\%$-Regel wird das ''nicht genug'' als Rate ($p\%$) am wahren Wert der gr??ten beitragenden Einheit gemessen. \pause
+% 			\item nach der (n,k)-Dominanzregel wird das ''nicht genug'' als Rate ($100-k\%$) am Zellwert gemessen. \pause
+% 			\item {\bf Ausserdem gilt:}
+% 			\begin{itemize}
+% 				\item jeder Zellwert, der nach der (2,k)-Regel als ''sicher'' gilt, ist auch ''sicher'' nach der $p\%$-Regel.\pause
+% 				\item nicht jeder Zellwert, der nach der $p\%$-Regel als ''sicher'' gilt ist auch ''sicher'' nach der (2,k)-Dominanzregel.\pause
+% 					\item Es gilt f?r den Zusammenhang zwischen p\%-Regel und (2,k)-Regel: $p = 100 \cdot \dfrac{100-k}{k}$
+% 			\end{itemize}
+% 		\end{itemize}
+% 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Identifizierung sensibler Zellen (Beispiele)}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} Der Gesamtwert $T$ einer Tabellenzelle sei 1000. \\
+% 		Der Wert des gr??ten Einzelbeitrages sei $B_1=851$. \\
+% 		Der zweitgr??te Einzelbeitrag sei $B_2=120$. \pause
+% 		\item Ist die Zelle nach Anwendung der (1,90)-Dominanzregel geheimzuhalten? \pause \\
+% 		$\longrightarrow$ Nein. $B_1 < \frac{90}{100} \cdot T$ $\Longleftrightarrow$ $851 < 900$ \pause
+% 		\item Ist die Zelle nach Anwendung der (2,85)-Dominanzregel geheimzuhalten? \pause \\
+% 		$\longrightarrow$ Ja. $B_1+B_2 > \frac{85}{100} \cdot T$ $\Longleftrightarrow$ $971 > 850$ \pause
+% 		\item welchem p entspricht die (2,85)-Dominanzregel? \pause \\
+% 		$\longrightarrow$ $p = 100 \cdot \frac{100-85}{85} = \approx 17.6$
+% 	\end{itemize}
+% \end{frame}
+
+\begin{frame}\frametitle{Identification of unsafe cells (examples)}
+	\begin{itemize}
+		\item {\bf Example:} The total $T$ of one cell in a table is 1000. \\
+		The value of the larges contributor is $B_1=500$. \\
+		The value of the second largest contributor is $B_2=400$. \pause
+		\item Is the cell safe for the (2,80)-dominance rule? \pause \\
+		$\longrightarrow$ Yes. $B_1+B_2 > \frac{80}{100} \cdot T$ $\Longleftrightarrow$ $900 > 800$ \pause
+		% \item which $p$ equals the (2,80)-dominance rule? \pause \\
+		% $\longrightarrow$ $p = 100 \cdot \frac{100-80}{80} = 25$ \pause
+		\item let p=25. Is the cell unsafe when we apply the 25\%-rule? \pause \\
+		$\longrightarrow$ Yes. $T-B_1-B_2 < \frac{25}{100} \cdot B_1$ $\Longleftrightarrow$ $100 < 125$ \pause
+	\end{itemize}
+	%\vspace{1cm}
+	%$\longrightarrow$ {\bf ?bungen im TGUI}
+\end{frame}
+
+
+% \begin{frame}\frametitle{Identifizierung sensibler Zellen (Beispiele)}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} Der Gesamtwert des Tabellenfeldes betrage 1000. \\Der Wert des gr??ten Einzelbeitrages sei 851. \\Der zweitgr??te Einzelbeitrag sei 120.
+% 		\item Ist die Zelle nach Anwendung der (1,90)-Dominanzregel geheimzuhalten? \pause \\$\longrightarrow$ Nein: $851 <  \frac{90}{100}  \cdot 1000$. \pause
+% 		\item Ist die Zelle nach Anwendung der (2,85)-Dominanzregel geheimzuhalten? \pause \\$\longrightarrow$ Ja. $851 + 120 >  \frac{85}{100}  \cdot 1000$
+% 		\item welchem p entspricht die (2,85)-Dominanzregel? \pause \\$\longrightarrow$ $p = 100 \cdot \frac{100-85}{85} = \approx 17.6$ 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Identifizierung sensibler Zellen (Beispiele)}
+% 	\begin{itemize}
+% 		\item {\bf Beispiel:} Der Gesamtwert des Tabellenfeldes betrage 1000. \\Der Wert des gr??ten Einzelbeitrages sei 500. \\Der zweitgr??te Einzelbeitrag sei 400.
+% 		\item Ist die Zelle nach Anwendung der (2,85)-Dominanzregel geheimzuhalten? \pause \\$\longrightarrow$ Ja. $500 + 400 >  \frac{85}{100} \cdot 1000$
+% 		\item sei p=17.6. Ist die Zelle bei Anwendung der 17.6\%-Regel zu sch?tzen? \pause \\$\longrightarrow$ Nein. $1000-500-400 > \frac{17.6}{100} \cdot 500$.
+% 	\end{itemize}
+% \end{frame}

@@ -1,0 +1,1569 @@
+\section{Methods}
+\begin{frame}\frametitle{Protection of unsafe cells}
+	\begin{itemize}
+		\item {\bf Repitition:} A (multi-dimensional, hierarchical) table is given by: \pause
+		\begin{itemize}
+			\item a data vector: $a = [a_1,\ldots, a_n]$ \pause
+			\item linear contraints of the form: $M y = b$ \pause
+			\item upper and lower bounds for each cell value expressing the knowledge of an intruder: $lb_i \leq a_i \leq ub_i$	\pause
+			\item A cell in a table is determined by its index: $i=1,\ldots,n$ \pause
+		\end{itemize}
+		\item {\bf Additionally:}
+		\begin{itemize}
+			\item given $p$ primary suppressions: $PS=\{i_1,\ldots,i_p\}$ \pause
+		\end{itemize}
+		\item {\bf Question:} How to protect primary suppressed cells?
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Protection of unsafe cells}
+	\begin{itemize}
+		\item {\bf Example:} \\
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 20 & 50 & 10 & {\bf 80} \\
+			{\bf II} 	& 8 & 19 & \textcolor{red}{22} & {\bf 49} \\
+			{\bf III} & 17 & 32 & 12 & {\bf 61} \\
+			\hline
+			{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+			\hline
+			\end{tabular}
+		\end{center}		\pause
+		\item Let cell $II/C ~ (PS=\{7\})$ be unsafe and to be protected
+		\item Different possibilites to protect this cell, e.g.:
+		\begin{itemize}
+			\item \bf {cell suppression}
+			\item \bf {rounding}
+			\item \bf {reporting upper and lower bounds}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{Cell suppression}
+\begin{frame}\frametitle{Cell suppression}
+	\begin{itemize}
+		\item {\bf Example:} \\
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 20 & 50 & 10 & {\bf 80} \\
+			{\bf II} 	& 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+			{\bf III}   & 17 & 32 & 12 & {\bf 61} \\
+			\hline
+			{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\item Most popular method
+		\item {\bf However:} Because of the linear dependencies in tables, it is not enough to protect the unsafe cells only. \pause
+		\item {\bf E.g.:} $44-10-12=22$ and $49-8-19=22$. \\ no protection for the primary suppressed cell. \pause
+		\item $\longrightarrow$  {\bf secondary cell suppression}: suppressing additional cells.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression}
+	\begin{itemize}
+		\item {\bf Example:} suppression pattern \pause
+		\begin{columns}
+		\begin{column}{5cm}
+			\begin{center}
+				\begin{tabular}{|r|lll|l|}
+				\hline
+				{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+				\hline
+				{\bf I} 	& 20 & 50 & 10 & {\bf 80} \\
+				{\bf II} 	& \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+				{\bf III} & \textcolor{red}{S} & 32 & \textcolor{red}{S} & {\bf 61} \\
+				\hline
+				{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+				\hline
+				\end{tabular}
+			\end{center}
+		\end{column}
+		\pause
+			\begin{column}{5cm}
+			\begin{center}
+				\begin{tabular}{|r|lll|l|}
+				\hline
+				{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+				\hline
+				{\bf I} 	& \textcolor{red}{S} & 50 & \textcolor{red}{S} & {\bf 80} \\
+				{\bf II} 	& \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+				{\bf III} & 17 & 32 & 12 & {\bf 61} \\
+				\hline
+				{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+				\hline
+				\end{tabular}
+			\end{center}
+			\end{column}
+		\end{columns}
+		\pause
+		\item When does a suppression pattern support enough protection to unsafe cells? \pause
+		\item Is there a optimal suppression pattern? \pause
+		\item {\bf Generally:} problem is NP-hard for hierarchical, multi-dimensional and linked tables
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression}
+	\begin{itemize}
+		\item {\bf good news:} there exist algorithms for obtaining the optimal solution \pause
+		\item {\bf bad news:} The optimal method is much too slow in practice.\pause
+		\item Methods to find the optimal suppression pattern are based on {\bf linear optimization} \pause
+		\begin{itemize}
+			\item Aim: find a suppression pattern that, e.g.,  minimizes  the number of suppressed cells \textbf{and} guarantees protection of the unsafe cells.\pause
+			\item Protection: A primary unsafe cell is protected, if the suppressed cell value cannot be estimated well enough, i.e. the attacker can only estimate an upper and lower bound of the cell value (attacker problem). This interval must be large enough. \pause
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression - Attacker  problem}
+	\begin{itemize}
+		\item {\bf Example:} Attacker problem \pause
+		\item {\bf Attacker:} knows the suppression pattern $SUP = \{5,7,9,11\}$, the protected table,
+		$M y = b; lb_i \leq y_i \leq ub_i ~ \forall i \in SUP; y_i=a_i ~ \forall i \notin SUP$
+			\begin{scriptsize}
+			\begin{center}
+				\begin{tabular}{|r|lll|l|}
+				\hline
+				{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+				\hline
+				{\bf I} 	& 20 & 50 & 10 & {\bf 80} \\
+				{\bf II} 	& \textcolor{red}{$y_5$} & 19 & \textcolor{red}{$y_7$} & {\bf 49} \\
+				{\bf III} & \textcolor{red}{$y_9$} & 32 & \textcolor{red}{$y_{11}$} & {\bf 61} \\
+				\hline
+				{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+				\hline
+				\end{tabular}
+			\end{center}
+			\end{scriptsize}	\pause
+
+		\item {\bf LP-problem:} $min/max ~ y_i ~ \forall i \in SUP$ unter contraints:\pause
+			\begin{scriptsize}
+			\begin{center}
+				\begin{tabular}{|r|lll|l|}
+				\hline
+				{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+				\hline
+				{\bf I} 	& 20 & 50 & 10 & {\bf 80} \\
+				{\bf II} 	& \textcolor{red}{[0:25]} & 19 & \textcolor{red}{[5:30]} & {\bf 49} \\
+				{\bf III} & \textcolor{red}{[0:25]} & 32 & \textcolor{red}{[4:29]} & {\bf 61} \\
+				\hline
+				{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+				\hline
+				\end{tabular}
+			\end{center}
+			\end{scriptsize}	\pause
+		\item the primary suppressed value $y_7$ is estimated by $[5:30]$.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression - attacker problem}
+	\begin{itemize}
+		\item {\bf Example:} Attackers Problem \pause
+		\item {\bf Attacker:} has knowledge on the suppression pattern $SUP = \{1,3,5,7\}$, the protected table,
+		$M y = b; lb_i \leq y_i \leq ub_i ~ \forall i \in SUP; y_i=a_i ~ \forall i \notin SUP$
+			\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& \textcolor{red}{$y_1$} & 50 & \textcolor{red}{$y_3$} & {\bf 80} \\
+			{\bf II} 	& \textcolor{red}{$y_5$} & 19 & \textcolor{red}{$y_7$} & {\bf 49} \\
+			{\bf III} & 17 & 32 & 12 & {\bf 61} \\
+			\hline
+			{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+			\hline
+			\end{tabular}
+		\end{center}			\end{scriptsize}	\pause
+		\item {\bf Lp-Problem:} $min/max ~ y_i ~ \forall i \in SUP$ under above given constraints:\pause
+			\begin{scriptsize}
+			\begin{center}
+				\begin{tabular}{|r|lll|l|}
+				\hline
+				{\bf W} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+				\hline
+				{\bf I} 	& \textcolor{red}{[0:28]} & 50 & \textcolor{red}{[2:30]} & {\bf 80} \\
+				{\bf II} 	& \textcolor{red}{[0:28]} & 19 & \textcolor{red}{[2:30]} & {\bf 49} \\
+				{\bf III} & 17 & 32 & 12 & {\bf 61} \\
+				\hline
+				{\bf Total} & {\bf 45} & {\bf 101} & {\bf 44} & {\bf 190} \\
+				\hline
+				\end{tabular}
+			\end{center}				\end{scriptsize}	\pause
+		\item the estimated primary suppressed cell value $y_7$ is  $[2:30]$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression}
+	\begin{itemize}
+		\item {\bf Note:} Cell suppression is nothing else than a publication of intervals.\pause
+		\item {\bf Protected?} When a cell is protected well enough? Use percentages of the upper and lower estimated cell value given the true value of the cell. \pause
+		\item {\bf Example:} the attacker should not be able to estimate the primary suppressed cell value more precisely than $\pm 10\%$. \pause
+		\item {\bf Information loss:} Cell suppression equals information loss. We want to find a suppression pattern that keeps the information loss as low as possible.\pause
+		%\item {\bf Verlustfunktion:} $min \sum_{i=1}^n x_i * w_i$ mit $x_i \in \{0,1\}$ ($x_i=1$ wenn $a_i$ Teil des Unterdr?ckungsschemas ist) und $w_i$ ein Gewicht, z.B:\pause
+		%\begin{itemize}
+		%	\item $w_i = 1 \ldots$ Minimierung der Anzahl der Unterdr?ckungen
+		%	\item $w_i = a_i \ldots$ Minimierung der unterdr?ckten Wertesumme
+		%\end{itemize}	\pause
+		\item We will show the \textbf{mathematical modell} for optimal cell suppression
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression - model assumptions}
+	\begin{itemize}
+		\item Assumption: the intruder knows a lower and upper bound for each cell value $a_i$:
+		\begin{scriptsize} \begin{eqnarray*}
+			lb_i \leq a_i \leq ub_i ~ \forall i=1,\ldots,n
+		\end{eqnarray*}	\end{scriptsize} \pause
+
+		\vspace{-0.15cm}
+		\item Relative outer bounds for each cell:
+		\vspace{-0.15cm}
+		\begin{scriptsize}	\begin{eqnarray*}
+			LB_i &:=& a_i - lb_i \geq 0 ~ \forall i=1,\ldots,n \\
+			UB_i &:=& ub_i - a_i \geq 0 ~ \forall i=1,\ldots,n
+		\end{eqnarray*}	\end{scriptsize} \pause
+
+		\vspace{-0.15cm}
+		\item 
+		For all sensible cells, define lower ($LPL_i$) and upper ($UPL_i$) protection levels, so that for the attackers intervals the following holds:
+		\vspace{-0.15cm}
+		\begin{scriptsize}
+		\begin{eqnarray*}
+			min(y_i) \leq a_i - LPL_i ~  \forall i \in PS \\
+			max(y_i) \geq a_i + UPL_i ~  \forall i \in PS
+		\end{eqnarray*}
+		\end{scriptsize} \pause
+
+		\vspace{-0.15cm}
+		\item Lets define a binary variable $x_i, ~ i=1,\ldots,n$:
+		\begin{scriptsize} \begin{eqnarray*}
+			x_i = 0 ~  \forall i \notin SUP \\
+			x_i = 1 ~  \forall i \in SUP
+		\end{eqnarray*}	\end{scriptsize}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression - model assumptions (2)}
+	\begin{itemize}
+		\item For each cell $a_i$ we define a weight $w_i$, that is included in the objective function to be optimized:
+		\vspace{-0.15cm}
+		\begin{scriptsize} \begin{eqnarray*}
+			w_i &=& a_i  \\
+			w_i &=& 1  \\
+			w_i &=& log(1+a_i)
+	\end{eqnarray*}	\end{scriptsize} \pause
+
+	\vspace{-0.3cm}
+	\item The objective function to be optimized is given as:
+	\vspace{-0.15cm}
+		\begin{scriptsize} \begin{eqnarray*}
+			min \sum_{i=1}^n w_i \cdot x_i
+	\end{eqnarray*}	\end{scriptsize} \pause
+	\vspace{-0.15cm}
+	\item under these constraints:
+	\vspace{-0.1cm}
+			\begin{scriptsize}
+			\begin{center}
+				\begin{tabular}{cc}
+				$M f = b$ & $M g = b$ \\
+				$f_i \geq a_i - LB_i \cdot x_i ~ \forall i=1,\ldots,n$ &  $g_i \geq a_i - LB_i \cdot x_i \forall i=1,\ldots,n$\\
+				$f_i \leq a_i + UB_i \cdot x_i ~ \forall i=1,\ldots,n$ &  $g_i \leq a_i + UB_i \cdot x_i \forall i=1,\ldots,n$ \\
+				$f_i \leq a_i - LPL_i ~ \forall i \in PS$ & $g_i \geq a_i + UPL_i ~ \forall i \in PS$
+				\end{tabular}
+			\end{center}
+			\end{scriptsize}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression - the model}
+	\begin{itemize}
+	\item Optimize: $min \sum_{i=1}^n w_i \cdot x_i$ under \pause
+			\begin{scriptsize}
+				\begin{eqnarray}
+				M f = b & M g = b \label{consistency1}\\
+				f_i \geq a_i - LB_i \cdot x_i ~ \forall i=1,\ldots,n & g_i \geq a_i - LB_i \cdot x_i \forall i=1,\ldots,n \label{consistency2}\\
+				f_i \leq a_i + UB_i \cdot x_i ~ \forall i=1,\ldots,n & g_i \leq a_i + UB_i \cdot x_i \forall i=1,\ldots,n \label{consistency3}\\
+				f_i \leq a_i - LPL_i ~ \forall i \in PS & g_i \geq a_i + UPL_i ~ \forall i \in PS	 \label{protection}
+			\end{eqnarray}
+		\end{scriptsize}	\pause
+		\vspace{-0.2cm}
+		\item We search for two possible tables $f=(f_1,\ldots,f_n)$	and $g=(g_1,\ldots,g_n)$.\pause
+		\item The constraints (\ref{consistency1}, \ref{consistency2}, \ref{consistency3}) define that for $f$ and $g$ all linear dependencies holds and that:\pause
+		\begin{scriptsize}
+		\begin{eqnarray}
+		f_i = g_i = a_i ~ \forall i \notin SUPP \\
+		lb_i \leq f_i, g_i \leq ub_i ~ \forall i \in SUPP
+		\end{eqnarray}
+		\end{scriptsize} \pause
+		\vspace{-0.2cm}
+		\item The constraints (\ref{protection}) ensure the protection levels for all primary suppressed cells.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression - remarks on the model}
+	\begin{itemize}
+	\item The model result in a {\bf optimal suppression pattern} related to the objective function.
+	\item But: in {\bf practise} {\bf it never works}, because the amount of utiltiy variables ($f_i, g_i, x_i)$ and the amount of contraints increases fastly. \pause
+	\item Another formulation of the model allows to reduce the necessary variables using the duality principle.
+	\pause
+	% \item The model will be defined only through its binary variables $x_i$.\pause
+	% \item Step by step new constraints are integrated in the model, such contraints that depend only on  $x_i$. \pause
+	% \item $\rightarrow$ {\bf iterativ algorithm}, whereby several less complex linear problems must be solved.
+	\item We will not go further into details, otherwise we need a lecture on linear mixed integer programming.
+	\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%
+\begin{frame}\frametitle{Cell suppression in hierachical tables}
+	\begin{itemize}
+		\item Given the table: \\ \pause
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+			{\bf 55.2} & 8 & 19 & 22 & {\bf 49} \\
+			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\ \hline
+			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+			{\bf 56.12} & 4 & 7 & 6 & {\bf 17} \\
+			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+			\rowcolor{Gray}{\bf 56.1} & 40 & 50 & 20 & {\bf 110} \\ \hline
+			{\bf 56.2} & 2 & 20 & 18 & {\bf 40} \\
+			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression in hierachical tables}
+	\begin{itemize}
+		\item Cells that needs protection are primary suppressed:\\
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\ \hline
+			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{NA} & 6 & {\bf \textcolor{red}{NA}} \\
+			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+			\rowcolor{Gray}{\bf 56.1} & 40 & \textcolor{red}{NA} & 20 & {\bf 110} \\
+			\hline
+			{\bf 56.2} & \textcolor{red}{NA} & 20 & 18 & {\bf 40} \\
+			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression in hierachical tables}
+	\begin{itemize}
+		\item Task: find a secondary suppression pattern so that primary cells cannot be estimated well enough and with a minimal Amount of secondary suppressions:
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{NA} & 6 & {\bf \textcolor{red}{NA}} \\
+			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+			\rowcolor{Gray}{\bf 56.1} & 40 & \textcolor{red}{NA} & 20 & {\bf 110} \\
+			\hline
+			{\bf 56.2} & \textcolor{red}{NA} & 20 & 18 & {\bf 40} \\
+			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression in hierachical tables}
+	\begin{itemize}
+		\item Task: find a secondary suppression pattern so that primary cells cannot be estimated well enough and with a minimal Amount of secondary suppressions:
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+			{\bf 55.1} & 20 & 50 & \textcolor{red}{S} & \textcolor{red}{{\bf S}} \\
+			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & \textcolor{red}{{\bf S}} \\
+			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\ \hline
+			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+			{\bf 56.11} & \textcolor{red}{S} & \textcolor{red}{S} & 5 & \textcolor{red}{{\bf S}} \\
+			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{NA} & 6 &
+			\textcolor{red}{{\bf S}} \\
+			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & \textcolor{red}{{\bf S}} \\ \hline
+			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & \textcolor{red}{{\bf S}} \\
+			{\bf 56.3} & \textcolor{red}{S} & \textcolor{red}{S} & 25 & {\bf 75} \\ \hline
+			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize} \pause
+		\item We suppressed 13 cells in addition to the primary suppressed ones. \pause
+		\item The information loss from the seconardy suppressions is 485. \pause
+		\item Is there a better suppression pattern?%$\longrightarrow$ {\bf TGUI}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell suppression in hierachical tables}
+	\begin{itemize}
+		\item Solution: the optimal suppression pattern
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+			{\bf 55.2} & \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+			{\bf 55.3} & \textcolor{red}{S} & 32 & \textcolor{red}{S} & {\bf 61} \\ \hline
+			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+			{\bf 56.11} & \textcolor{red}{S} & 28 & 5 & \textcolor{red}{{\bf S}} \\
+			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{NA} & 6 &
+			\textcolor{red}{{\bf S}} \\
+			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize} \pause
+		\item We suppressed 7 cells in addition to the primary suppressed ones. \pause
+		\item The information loss from the seconardy suppressions is 148. \pause
+		\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Aufgabe: Auffinden eines g?ltigen Sperrmusters gegen exakte R?ckrechenbarkeit mit minimaler Anzahl von Sekund?rsperrungen:
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\ \hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & 7 & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Aufgabe: Auffinden eines g?ltigen Sperrmusters gegen exakte R?ckrechenbarkeit mit minimaler Anzahl von Sekund?rsperrungen:
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & 7 & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Aufgabe: Auffinden eines g?ltigen Sperrmusters gegen exakte R?ckrechenbarkeit mit minimaler Anzahl von Sekund?rsperrungen:
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf \textcolor{red}{S}} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Aufgabe: Auffinden eines g?ltigen Sperrmusters gegen exakte R?ckrechenbarkeit mit minimaler Anzahl von Sekund?rsperrungen:
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf \textcolor{red}{S}} \\
+% 			\hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Aufgabe: Auffinden eines g?ltigen Sperrmusters gegen exakte R?ckrechenbarkeit mit minimaler Anzahl von Sekund?rsperrungen:
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & \textcolor{red}{S} & 32 & \textcolor{red}{S} & {\bf 61} \\
+% 			\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf \textcolor{red}{S}} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize} \pause
+% 		\item Wir mussten insgesamt 8 zus?tzliche Zellen sperren. \pause
+% 		\item Der Informationsverlust der Sekund?rsperrungen betr?gt 254.
+% 		\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & 7 & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & 40 & \textcolor{red}{NA} & 20 & {\bf 110} \\
+% 			\hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & 20 & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & 9 & 28 & 5 & {\bf 42} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & 7 & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\	\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & \textcolor{red}{S} & 28 & 5 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & 7 & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & 8 & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & 17 & 32 & 12 & {\bf 61} \\ \hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & \textcolor{red}{S} & 28 & 5 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & \textcolor{red}{S} & 32 & \textcolor{red}{S} & {\bf 61} \\
+% 			\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & \textcolor{red}{S} & 28 & 5 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+%
+% \begin{frame}\frametitle{Zellunterdr?ckung in hierarchischen Tabellen}
+% 	\begin{itemize}
+% 		\item Gibt es alternative L?sungen?:\\
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf } & {\bf R1} & {\bf R2} & {\bf R3} & {\bf Total} \\ \hline
+% 			{\bf 55.1} & 20 & 50 & 10 & {\bf 80} \\
+% 			{\bf 55.2} & \textcolor{red}{S} & 19 & \textcolor{red}{NA} & {\bf 49} \\
+% 			{\bf 55.3} & \textcolor{red}{S} & 32 & \textcolor{red}{S} & {\bf 61} \\
+% 			\hline
+% 			\rowgblb{55}{45}{101}{44}{190} \\ \hline
+% 			{\bf 56.11} & \textcolor{red}{S} & 28 & 5 & {\bf \textcolor{red}{S}} \\
+% 			{\bf 56.12} & \textcolor{red}{NA} & \textcolor{red}{S} & 6 & {\bf \textcolor{red}{NA}} \\
+% 			{\bf 56.13} & 27 & 15 & 9 & {\bf 51} \\ \hline
+% 			\rowcolor{Gray}{\bf 56.1} & \textcolor{red}{S} & \textcolor{red}{NA} & 20 & {\bf 110} \\ \hline
+% 			{\bf 56.2} & \textcolor{red}{NA} & \textcolor{red}{S} & 18 & {\bf 40} \\
+% 			{\bf 56.3} & 20 & 30 & 25 & {\bf 75} \\ \hline
+% 			\rowgblb{56}{62}{100}{53}{225} \\ \hline
+% 			\rowbwb{Total}{107}{201}{97}{415} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\item Wir mussten insgesamt 8 zus?tzliche Zellen sperren. \pause
+% 		\item Der Informationsverlust der Sekund?rsperrungen betr?gt allerdings nur 155.
+% 		\end{itemize}
+% \end{frame}
+
+
+\begin{frame}\frametitle{Cell suppression - challenges}
+	\begin{itemize}
+		\item {\bf Hierarchical tables:} Variables (z.B NACE, NUTS,...) are usually hierarchical, which makes it difficult to model the linear dependencies ($M y = b$) in an automatized manner. \pause
+		\item {\bf linked tables:} If certain cells can be found different tables. If such a cell is suppression by a secondary suppression, it must be checked if the cell cannot be estimated precisly in other tables.\pause
+		\item {\bf Computational complexity:} the optimization problem is very hard to solve.\pause
+		\item {\bf Heuristics} are necessary to find an almost optimal suppression pattern.\pause
+		\begin{itemize}
+			\item HITAS: Transformation of hierarchical tables to 2-dimensional tables and suppression of them given a certain schedule.\pause
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{Rounding}
+\begin{frame}\frametitle{Rounding}
+	\begin{itemize}
+		\item {\bf Rounding} as an alternative to cell suppression. \pause
+		\item {\bf Variants for rounding:}
+		\pause
+		\begin{itemize}
+			\item rounding as usual
+			\item random rounding
+			\item controlled rounding \pause
+		\end{itemize}
+		\item All have in common a chosen {\bf rounding basis} (often 3 or 5).\pause
+		\item {\bf rounding as usual} (rounding to the next multiple of the basis) is not the best approach \\ $\rightarrow$ we skip to apply this approach.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Random rounding}
+	\begin{itemize}
+		\item {\bf Idea:} a cell value is round to a multiple of the basis, but ceiling or floor is decided randomly.\pause
+		% \item {\bf Vielfache} der Basis werden nicht ver?ndert.\pause
+		% \item {\bf Marinal totals} are werden ?blicherweise getrennt von den inneren Tabellenzellen behandelt.\pause
+		% \item {\bf Wichtig:} unterschiedliche Gewichtungsschemata sind m?glich, jedoch soll keine Tendenz zum Auf- oder Abrunden durch das Gewichtungsschema implizit gegeben werden.\pause
+		\item	{\bf Disadvantage:} hierarchical tables are no longer be additiv.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Random rounding - example}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 4 & 6 & 3 & {\bf 13} \\
+			{\bf II} 	& 2 & 5 & 7 & {\bf 14}\\
+			{\bf III} & 4 & 5 & 3 & {\bf 12} \\
+			\hline
+			{\bf Total} & {\bf 10} & {\bf 16} & {\bf 13}  & {\bf 39} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}\pause
+		\begin{itemize}
+		\item {\bf Basis:} Lets choose 3 and calculate the krest of the division through its basis:\pause
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 1 & 0 & 0 & {\bf 1} \\
+			{\bf II} 	& 1 & 2 & 1 & {\bf 2}\\
+			{\bf III} & 1 & 2 & 0 & {\bf 0} \\
+			\hline
+			{\bf Total} & {\bf 1} & {\bf 1} & {\bf 1}  & {\bf 0} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}\pause
+		\item {\bf Weighting scheme:}\pause
+		\begin{itemize}
+			\item rest of division = 0: cell value stays untouched.\pause
+			\item rest of division = 1: with probability $\frac{1}{3}$ we apply ceiling, with prob. $\frac{2}{3}$ floor.\pause
+			\item rest of division = 2: with probability $\frac{2}{3}$ we apply ceiling, with prob. $\frac{1}{3}$ floor.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Random rounding - example}
+	\begin{itemize}
+		\item One possible solution:
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 6 & 6 & 3 & {\bf 15} \\
+			{\bf II} 	& 3 & 3 & 6 & {\bf 12}\\
+			{\bf III} & 3 & 6 & 3 & {\bf 12} \\
+			\hline
+			{\bf Total} & {\bf 9} & {\bf 15} & {\bf 15}  & {\bf 39} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}	\pause
+		\item problem with additivity in colum 1 and 3. \pause
+		\item another solution: \pause
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 3 & 6 & 3 & {\bf 15} \\
+			{\bf II} 	& 0 & 6 & 6 & {\bf 15}\\
+			{\bf III} & 3 & 3 & 3 & {\bf 12} \\
+			\hline
+			{\bf Total} & {\bf 12} & {\bf 15} & {\bf 15}  & {\bf 39} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}	\pause
+		\item additivity in colum 1,3 and 4 and rows 1-4 stimmt is violated.\pause
+		\item {\bf Attention:} this causes problems when the same cell is rounded different in linked tables.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{Controlled rounding}
+	\begin{itemize}
+		\item {\bf Idea:} each cell value is rounded on a specific manner, so that additivity of tables are not violated.\pause
+		% \item {\bf Vielfache} der Basis werden (grunds?tzlich) nicht ver?ndert. \pause
+		% \item {\bf Important:} unterschiedliche Gewichtungsschemata sind m?glich, jedoch soll keine Tendenz zum Auf- oder Abrunden durch das Gewichtungsschema implizit gegeben werden. \pause
+		\item	{\bf Advantage:} tables stays (almost) additive. \pause
+		\item	{\bf Disadvantage:} complex problem which is often practically unsolvable.
+	\end{itemize}
+\end{frame}
+
+%\begin{frame}\frametitle{kontrolliertes Runden - Mathematisches Modell}
+%	\begin{itemize}
+%		\item {\bf Modell:}
+%		\begin{eqnarray*}
+%			min \sum_{i=1}^n c_i \cdot x_i \\
+%			\sum_{i=1}^n m_{ji} (aRD_i + r_i \cdot x_i) &=& b_j \ldots j \in J \\
+%			x_i &=& 0 \ldots \mbox{if} ~ aRD_i < lb_i ~ \mbox{or} ~ upl_i > aRU_i\\
+%			x_i &=& 1 \ldots \mbox{if} ~ aRU_i > ub_i ~ \mbox{or} ~ lpl_i < aRD_i\\
+%			x_i &\in& \{0,1\} \ldots \mbox{sonst}
+%		\end{eqnarray*}
+%		\item mit:
+%		\begin{center}
+%			\begin{tabular}{ll}
+%				$RD_i \ldots \mbox{abgerundeter Wert f?r}~ a_i$ & $RU_i \ldots \mbox{aufgerundeter Wert f?r}~ a_i$ \\
+%				$r_i = RU_i - RD_i$ & $c_i$ = costs\\
+%				$upl_i \ldots \mbox{oberes Protection f?r}~ a_i$ & $lpl_i \ldots \mbox{untere Protection f?r}~ a_i$ \\
+%				$ub_i \ldots \mbox{obere Grenze f?r}~ a_i$ & $lb_i \ldots \mbox{untere Grenze f?r}~ a_i$
+%			\end{tabular}
+%		\end{center}
+%	\end{itemize}
+%\end{frame}
+
+\begin{frame}\frametitle{Controlled rounding - example}
+	\begin{itemize}
+		\item {\bf original table:}\\
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 4 & 6 & 3 & {\bf 13} \\
+			{\bf II} 	& 2 & 5 & 7 & {\bf 14}\\
+			{\bf III} & 4 & 5 & 3 & {\bf 12} \\
+			\hline
+			{\bf Total} & {\bf 10} & {\bf 16} & {\bf 13}  & {\bf 39} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize} \pause
+		\item Tabelle {\bf after controlled rounding:} \\
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\
+			\hline
+			{\bf I} 	& 3 & 6 & 3 & {\bf 12} \\
+			{\bf II} 	& 3 & 3 & 9 & {\bf 15}\\
+			{\bf III} & 3 & 6 & 3 & {\bf 12} \\
+			\hline
+			{\bf Total} & {\bf 9} & {\bf 15} & {\bf 15}  & {\bf 39} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}	\pause
+		\item All marginal totals are valid, the table is additive.
+	\end{itemize}
+\end{frame}
+
+\subsection{Controlled tabular adjustment}
+\begin{frame}\frametitle{Controlled tabular adjustment - CTA}
+	\begin{itemize}
+		\item {\bf Idea:}
+		\begin{itemize}
+			\item 1) each primary suppressed cell is replaced by an (large enough) interval.
+			\item 2) All cells are adjusted in a way that the tables stays additive. \pause
+		\end{itemize}
+		\item {\bf Advantage:} no suppressions! Adustments for non-primary protected cells are often minor.\pause
+		\item {\bf Additional advantage:} optimal algorithms exists. \pause
+		\item {\bf Disadvantage:} optimal algorithms are only feasable in computational time for small tables. Again we need non-optimal heuristics which do not guarantee a solution of the problem.
+	\end{itemize}
+\end{frame}
+
+% \begin{frame}\frametitle{Zellanpassung (CTA) -  Beispiel}
+% 	\begin{itemize}
+% 		\item {\bf urspr?ngliche Tabelle:} \pause
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+% 			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+% 			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+% 			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize} \pause
+% 		\item {\bf Fixieren der Werte} f?r die sensitiven Zellen \pause
+%
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I}   & \w{75*} & \w{0*}  & \w{85} & \wb{160*} \\
+% 			{\bf II}  & \w{71}  & \w{51}  & \w{30} & \wb{152} \\
+% 			{\bf III} & \w{0*}  & \w{29*} & \w{36} & \wb{65*} \\ \hline
+% 			{\bf Total} & \wb{146} & \wb{80*} & \wb{151} & \wb{377*} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Zellanpassung (CTA) -  Beispiel}
+% 	\begin{itemize}
+% 		\item {\bf urspr?ngliche Tabelle:}
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+% 			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+% 			{\bf III}   & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+% 			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\item {\bf Fixieren der Werte} f?r die sensitiven Zellen
+%
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I}   & \w{75*} & \cbw{0*}  & \w{85} & \wb{160*} \\
+% 			{\bf II}  & \w{71}  & \w{51}  & \w{30} & \wb{152} \\
+% 			{\bf III} & \w{0*}  & \w{29*} & \w{36} & \wb{65*} \\ \hline
+% 			{\bf Total} & \wb{146} & \wb{80*} & \wb{151} & \wb{377*} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+
+
+% \begin{frame}\frametitle{Zellanpassung (CTA) -  Beispiel}
+% 	\begin{itemize}
+% 		\item {\bf urspr?ngliche Tabelle:}
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H}   & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I}   & 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+% 			{\bf II}  & 71 & 51 & 30 & {\bf 152}\\
+% 			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+% 			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\item {\bf Fixieren der Werte} f?r die sensitiven Zellen
+%
+% 		\begin{scriptsize}
+% 		\begin{center}
+% 			\begin{tabular}{|r|lll|l|}
+% 			\hline
+% 			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+% 			{\bf I}   & \w{75*} & \cbw{0*} & \w{85} & \wb{160*} \\
+% 			{\bf II}  & \w{71} & \w{51} & \w{30}  & \wb{152} \\
+% 			{\bf III} & \w{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+% 			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+% 			\end{tabular}
+% 		\end{center}
+% 		\end{scriptsize}
+% 		\end{itemize}
+% \end{frame}
+
+\begin{frame}\frametitle{CTA -  Example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize} \pause
+		\item {\bf fix the values} for the sensitive cells
+		\pause
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I}   & \w{75*} & \cbw{0*}  & \w{85} & \wb{160*} \\
+			{\bf II}  & \w{71}  & \w{51}    & \w{30} & \wb{152}\\
+			{\bf III} & \cbw{0*}  & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ 	\hline
+			{\bf I}   & \red{75*}  & \cbw{0*}  & \w{85} & \wb{160*} \\
+			{\bf II}  & \w{71}   & \w{51}    & \w{30} & \wb{152} \\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151} & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H}     & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III}   & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of the non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I}   & \red{75*}  & \cbw{0*}  & 85 & \wb{160*} \\
+			{\bf II}  & \w{71}   & \w{51}    & \w{30} & \wb{152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA -  example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& \w{71} & \w{51} & \w{30} & \wb{152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & \w{51} & \w{30} & \wb{152} \\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & \w{30} & \wb{152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & \wb{152}\\
+			{\bf III}   & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\
+			\hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & \w{36} & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \wb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \redb{65*} \\ \hline
+			{\bf Total} & \wb{146} & \wb{80*} & \wb{151} & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \redb{65*} \\ \hline
+			{\bf Total} & {\bf 146} & \wb{80*} & \wb{151} & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \redb{65*} \\ \hline
+			{\bf Total} & {\bf 146} & \redb{80*} & \wb{151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I}   & \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II}  & 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \redb{65*} \\ \hline
+			{\bf Total} & {\bf 146} & \redb{80*} & {\bf 151}  & \wb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Adjustment} of non-sensitive cells
+
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \red{75*} & \cbw{0*} & 85 & \redb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \redb{65*} \\ \hline
+			{\bf Total} & {\bf 146} & \redb{80*} & {\bf 151}  & \redb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\end{itemize}
+\end{frame}
+
+
+\begin{frame}\frametitle{CTA - example}
+	\begin{itemize}
+		\item {\bf original table:}\\
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& 74 & \cbw{17 [0:37]} & 85 & {\bf 176} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{1[0,21]} & \cbw{9[0,29]} & 36 & {\bf 46} \\ \hline
+			{\bf Total} & {\bf 146} & {\bf 77} & {\bf 151}  & {\bf 374} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item Table {\bf after CTA:} \\
+		\begin{scriptsize}
+		\begin{center}
+			\begin{tabular}{|r|lll|l|}
+			\hline
+			{\bf H} & {\bf A} & {\bf B} & {\bf C} & {\bf Total} \\ \hline
+			{\bf I} 	& \cbw{75*} & \cbw{0*} & 85 & \cbwb{160*} \\
+			{\bf II} 	& 71 & 51 & 30 & {\bf 152}\\
+			{\bf III} & \cbw{0*} & \cbw{29*} & 36 & \cbwb{65*} \\ \hline
+			{\bf Total} & {\bf 146} & \cbwb{80*} & {\bf 151}  & \cbwb{377*} \\ \hline
+			\end{tabular}
+		\end{center}
+		\end{scriptsize}
+		\item {\bf Implementation} is based on linear optimization (complex formulas).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Cell Adjustment by ABS}
+	\begin{itemize}
+		\item method from {\bf ABS} (Australian Bureau of Statistics) is a special case of {\bf table perturbation} \pause
+		\item {\bf Idea:} konsistent and random perturbation of cells in a table based on
+		\begin{itemize}
+		    \item Record-keys
+		    \item Cell-keys
+		    \item LookUp-tables \pause
+		\end{itemize}
+		\item {\bf Advantage:} konsistent tables results \pause
+		\item {\bf Disadvantage:} tables are non-additive anymore \pause
+	\end{itemize}
+\end{frame}
+

@@ -1,0 +1,150 @@
+
+
+% \usepackage{natbib}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+%\usepackage[backend=biber]{biblatex}
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[sidebar=false,showpagetotal=false]{style/beamerthemeSTAT}
+\usepackage[sidebar=false,showpagetotal=false]{style/beamercolorthemeSTAT}
+\usepackage{style/beamerinnerthemeSTAT}
+\usepackage{style/beamerouterthemeSTAT}
+\usepackage{style/beamerfontthemeSTAT}
+
+
+\usepackage{lmodern}
+\usepackage{tikz} 
+\usetikzlibrary{fit,positioning} 
+\usetikzlibrary{matrix,decorations.pathreplacing,calc}
+\usetikzlibrary{decorations.pathreplacing}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture,baseline=(#1.base)]
+  \node (#1) {\strut};}
+
+
+\usepackage{alltt}
+%\usepackage{da1}
+% \usepackage{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{multirow}
+\usepackage{tabularx}
+%\usepackage{bbm}
+\usepackage{listings}
+\usepackage{inconsolata}
+
+\lstset{breaklines=true,showstringspaces=false}
+
+\usepackage{bm}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{subfigure}
+\hypersetup{colorlinks=true, breaklinks=true, linkcolor=STATred, menucolor=STATred, urlcolor=STATred}
+%\newcommand*{\newblock}{}  % necessary to make beamer work %with natbib
+\newcommand{\sdcMicro}{\textsf{sdcMicro}}
+\newcommand{\Rlogo}{\raisebox{-.1mm}{\includegraphics[width=1.2em]{Rlogo.png}}}
+\newcommand{\shinyRStudio}{\raisebox{-.1mm}{\includegraphics[width=1.8em]{shinyRStudio.png}}}
+\newcommand{\mymat}[1]{\boldsymbol{#1}}
+\newcommand{\m}[1]{\boldsymbol{#1}}
+\newcommand{\R}{\textsf{R}}
+\newcommand{\code}[1]{\texttt{#1}}     
+\bibpunct{(}{)}{,}{a}{}{,}
+\usepackage{color,xcolor}
+\usepackage{colortbl}
+\colorlet{tableheadcolor}{white!10} % -- Farbe f?r den Tabellenkopf
+\usepackage{multirow} 
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ulem}
+\usepackage{pifont}
+\newcommand{\tick}{\ding{52}}
+\let\proglang=\textsf
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+\newcolumntype{k}{>{\columncolor{red!10}}c}
+\newcolumntype{r}{>{\columncolor{red!50}}c}
+\newcolumntype{g}{>{\columncolor{green!20}}c}
+\newcolumntype{b}{>{\columncolor{blue!20}}c}
+\newcolumntype{y}{>{\columncolor{yellow!5}}c}
+\newcolumntype{w}{>{\columncolor{white!20}}c}
+  
+%\newcommand*{\newblock}{}  % necessary to make beamer work %with natbib
+
+\lstloadlanguages{R}
+\lstdefinelanguage{Renhanced}[]{R}{%
+  morekeywords={print,
+  createSdcObject,slotNames,acf,ar,arima,arima.sim,colMeans,colSums,is.na,is.null,%
+  mapply,ms,na.rm,nlmin,replicate,row.names,rowMeans,rowSums,seasonal,%
+  sys.time,system.time,ts.plot,which.max,which.min,read.dta,
+microaggregation,createSdcObject,topBotCoding,localSuppression,
+install.packages,update.packages,anyMethod,createSdcObj,install_github,localSupp,method,undo},
+deletekeywords={c},
+  alsoletter={.\%},%
+  alsoother={:_\$}
+}
+\lstset{language=Renhanced,extendedchars=true,
+  basicstyle=\small\ttfamily,
+commentstyle=\textsl,
+keywordstyle=\color{blue}{\mdseries},
+  showstringspaces=false,
+  index=[1][keywords], 
+  indexstyle=\indexfonction
+}
+
+\newcommand{\indexfonction}[1]{\index{#1@\texttt{#1}}}
+
+\newcommand{\boma}[1]{\mbox{\boldmath ${#1}$}}
+\newcommand{\MD}{\mbox{MD}}
+\newcommand{\Cov}{\mbox{Cov}}
+\newcommand{\argmax}{\mathop{\mbox{argmax}}}
+\newcommand{\argmin}{\mathop{\mbox{argmin}}}
+\newcommand{\ab}{\boldsymbol{a}}
+\newcommand{\betab}{\boldsymbol{\beta}}
+\newcommand{\med}{\mathop{\mbox{median}}}
+\newcommand{\mad}{\mathop{\mbox{MAD}}}
+\newcommand{\wb}{\boldsymbol{w}}
+
+
+
+
+ 
+\definecolor{ring color}{rgb}{0.31,0.31,0.34}
+\definecolor{border color}{rgb}{0.85,0.8627,0.839}
+
+\newcommand{\married}{%
+\begin{tikzpicture}[x=1ex, y=1ex, scale=0.5, baseline=-.6ex]
+\begin{scope}
+\clip (-2,-.2) rectangle ++(5.5,2.2);
+\path[draw=border color,line width=.08ex,
+     fill=ring color,even odd rule]
+     (0, 0) circle (2ex)
+     (0, 0) ellipse (1.5ex and 1.3ex);
+\path[draw=border color,line width=.08ex,
+     fill=ring color,even odd rule]
+     (1.5, 0) circle (2ex)
+     (1.5, 0) ellipse (1.5ex and 1.3ex);
+\end{scope}
+\begin{scope}
+\clip (-2,-2) rectangle ++(5.5,2.2);
+\path[draw=border color,line width=.08ex,
+     fill=ring color,even odd rule]
+     (1.5, 0) circle (2ex)
+     (1.5, 0) ellipse (1.5ex and 1.3ex);
+\path[draw=border color,line width=.08ex,
+     fill=ring color,even odd rule]
+     (0, 0) circle (2ex)
+     (0, 0) ellipse (1.5ex and 1.3ex);
+\end{scope}
+\end{tikzpicture}%
+} 
+ 

@@ -1,0 +1,27 @@
+1. Ziehe mit unterschiedlichen Designs Stichproben aus 
+simPop::eusilcP . Zum Ziehen der Stichproben:
+entweder simFrame::draw, Paket sampling, etc. verwenden. Auswirkungen auf disclosure risk?
+
+2. mvTopCoding. Beschreiben was es tut. Anwenden an Daten (z.B. EIA, Tarragona, ...). Disclosre risk vs. data utiltity mit verschiedenen Parametereinstellungen. Vergleich zu addNoise Methoden und Microaggregation.
+
+3. sdcTable anhand der Beispiele im Paket erklaeren. Was macht das Paket? Welche Methoden werden eingesetzt (grob)
+
+4. easySdcTable anhand eines interessanten Datensatzes anwenden und schrittweise erklaeren
+
+5. https://www.insee.fr/en/statistiques/fichier/3635545/imet131-r-chapitre-14.pdf
+
+6. Package SmallCountRounding https://www.researchgate.net/publication/327768398_An_Algorithm_for_Small_Count_Rounding_of_Tabular_Data
+
+7. https://github.com/olangsrud/RegSDC
+
+8. https://crises-deim.urv.cat/web/docs/publications/lncs/1017.pdf
+
+9. algorithm. Fully synthetic multiple imputation. 
+Compare it with package simPop? Function simCategorical, simContinous, ...
+a) present the "old" approach
+b) use simPop for final comparison in the report.
+
+10.) use one or two data sets from destatis (Forschungsdatenzentrum)
+If possible, use scientific-use files. E.g. Microzensus. 
+Look at disclosure risks theirein. 
+

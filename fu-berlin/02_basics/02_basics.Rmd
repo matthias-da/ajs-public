@@ -1,0 +1,115 @@
+---
+title: "Advanced Survey Statistics: Disclosure Control"
+subtitle: "Part 2: Basics"
+author: "Matthias Templ"
+date: FU-Berlin, 2019
+output:
+  beamer_presentation:
+    includes:
+      in_header: ../header.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+theme_set(theme_grey() + theme(text=element_text(size = 20)))
+```
+
+
+## \"Uberblick
+
+Im Folgenden werden vor allem Begriffe eingef\"uhrt.
+
+- Variablentypen bzgl. Statistischer Geheimhaltung
+- Arten der Re-identifizierung
+- Disclosure Risk vs. Data Utility
+
+Buch Kapitel 2
+
+## Variablentypen
+
+\includegraphics[width = 0.9\textwidth]{types}
+
+## Arten von Merkmalen in Daten (1/2)
+
+1. Global-eindeutige (z.B. Versicherungsnummer) und **direkte Identifikatoren** (z.B. genaue Adresse) unbedingt löschen oder pseudo-anonymisieren.
+2. **Quasi-Identifikatoren** (z.B. PLZ, Alter, Geschlecht), abgekürzt QIDs:
+Attribute die für eine Re-Identifikation genutzt werden können; heissen
+auch Key Variables/**Schl\"usselvariablen**, Indirect Identifiers oder Implicit Identifiers. Salopp: Jene Variablen die sich mit anderen am Markt erh\"altlichen Populationen (oder Stichproben) \"uberschneiden.
+3. **Sensible Attribute** (z.B. Krankheitsstatus, Kosten, ...): Schützenswerte
+Informationen mit denen Individuen nicht assoziiert werden wollen.
+4. **Nicht-Sensible Attribute**: Informationen deren Kenntnis keinen
+Datenschutzverstoss darstellt.
+
+## Arten von Merkmalen in Daten (2/2)
+
+5. Linked (auch manchmal Ghost-Variablen genannt): Wenn Region suppressed wird, sollte auch Gemeinde-ID suppressed werden. 
+6. Gewichtsvektor: Stichprobengewichte m\"ussen bei SDC ber\"ucksichtigt werden. Risiko einer Identifizierung ist h\"oher, wenn man die Daten der Population hat, als nur von einer Stichprobe.
+7. Hierachien/Cluster: Beispiel ist European Structural Earnings Statistics. Hier werden in der ersten Stufe Firmen gezogen, in der 2. Stufe Personen aus den gezogenen Firmen. Clusterbespiel: European Statistics on Income and Living Conditions: hier werden Haushalte gezogen und von allen Personen im Haushalt Informationen abgefragt.
+
+## Arten der Re-identifizierung (disclosure)
+
+- **Identity disclosure**. Link des Datensatzes mit externen Daten sodass Person identifiziert wird. 
+    * Beispiel: Versichertendaten \"uber Personen inklusive Krankheitsbilder. Match der Quasi-Identifiers (Alter, Geschlecht, Wohngemeinde) mit Daten von GfK welche Namen enth\"alt. Falls Link f\"ur eine Person erfolgreich, weiss der Datenangreifer nun welche Krankheiten diese Person hatte.
+    
+## Arten der Re-identifizierung (disclosure)
+
+- **Attribute Disclosure**. 
+    * Beispiel 1: DeStatis gibt Daten an Externe in denen **alle** dunkelh\"autigen Menschen zwischen 50 und 60 in Region 1234 r\"om/kath. sind. 
+    * \begin{tabular}{|l|ccc|c|}
+\toprule
+ & \multicolumn{3}{c|}{key variables} & sensitive variable \\
+ \cmidrule(r){1-1} \cmidrule(r){2-4} \cmidrule(r){5-5}
+obs & race & age & region & religion \\
+\midrule
+1 & black & 50--60 & 1234 & roman/catholic \\
+2 & black & 50--60 & 1234 & roman/catholic \\
+3 & black & 50--60 & 1234 & roman/catholic \\
+4 & black & 50--60 & 1234 & roman/catholic \\
+\bottomrule
+\end{tabular}
+
+$\longrightarrow$ nun weiss man von diesen **Individuen** eine sensitive Information.
+
+## Arten der Re-identifizierung (disclosure)
+
+- **Inferencial Disclosure**. Wenn die modellbasierte einer sensitiven Variable den wahren Wert sch\"atzt. 
+
+Beispiel: Wir verwenden das Buch, Seite 40.
+
+
+## \"Ubungen
+
+Exercises Buch Seite 41
+
+Machen Sie sich mit den Daten aus Question 2.1. und 2.2. vom Buch vertraut.
+
+- 2.1: Folgen Sie den Anweisungen
+- Diskutieren Sie mit Ihrem Sitznachbarn a-d (Question 2.1 und 2.2)
+
+
+## RU-Maps
+
+Wir wissen: 
+
+- je h\"oher das Re-identifizierungsrisiko von Personen, desto schlechter
+- je massiver in die Daten eingegriffen wird um das Risiko zu senken, desto schlechter, da die Datenqualit\"at leidet.
+
+Optimal ist also eine Methode die es schafft, das Risiko zu senken und die Datenqualit\"at hoch h\"alt.
+
+- Um Methoden zu vergleichen und Parametereinstellungen von Methoden zu vergleichen, eignen sich **Risk-Utilitiy Maps**.
+
+## RU-Maps
+
+\includegraphics[width = 0.9\textwidth]{ru-map-ut.png}
+
+## R'U'-Maps (eigentlich R-IL Maps)
+
+- Statt Utility kann der Informationsverlust bewertet werden.
+
+\begin{center}
+\includegraphics[width = 0.7\textwidth]{/Users/teml/workspace/sdc-springer/book/figure/rumap-1-save.pdf}
+\end{center}

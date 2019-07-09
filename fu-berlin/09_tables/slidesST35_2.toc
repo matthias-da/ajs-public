@@ -1,0 +1,12 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {ngerman}
+\beamer@sectionintoc {2}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {3}{Methods}{6}{0}{2}
+\beamer@subsectionintoc {3}{1}{Statistical tables}{6}{0}{2}
+\beamer@sectionintoc {4}{Identification of unsafe cells}{40}{0}{3}
+\beamer@sectionintoc {5}{Methods}{50}{0}{4}
+\beamer@subsectionintoc {5}{1}{Cell suppression}{59}{0}{4}
+\beamer@subsectionintoc {5}{2}{Rounding}{123}{0}{4}
+\beamer@subsectionintoc {5}{3}{Controlled tabular adjustment}{149}{0}{4}
+\beamer@sectionintoc {6}{Software}{175}{0}{5}
+\beamer@sectionintoc {7}{Conclusion}{191}{0}{6}
