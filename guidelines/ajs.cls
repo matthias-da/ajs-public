@@ -53,6 +53,9 @@
 \ProcessOptions
 \LoadClass[11pt,a4paper,twoside]{article}
 %% required packages
+% This fixes https://github.com/matthias-da/ajs-public/issues/2.
+% Retrieved from https://github.com/rstudio/rticles/issues/329
+\RequirePackage[2020/02/02]{latexrelease}
 \RequirePackage{graphicx,color,ae,fancyvrb}
 \RequirePackage[T1]{fontenc}
 \IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
