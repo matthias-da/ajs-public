@@ -56,9 +56,11 @@
 % This fixes https://github.com/matthias-da/ajs-public/issues/2.
 % Retrieved from https://github.com/rstudio/rticles/issues/329
 \RequirePackage[2020/02/02]{latexrelease}
-\RequirePackage{graphicx,color,ae,fancyvrb}
+\RequirePackage{graphicx,color,xcolor,ae,fancyvrb}
+\usepackage{orcidlink}
 \RequirePackage[T1]{fontenc}
 \IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+\IfFileExists{lmodern.sty}{\RequirePackage{lmodern}}{}
 %% bibliography
 \if@shortnames
   \usepackage[authoryear,round]{natbib}
@@ -111,6 +113,7 @@
 \newcommand{\Plainreviewer}[1]{\def\@Plainreviewer{#1}}
 \newcommand{\Softwaretitle}[1]{\def\@Softwaretitle{#1}}
 \newcommand{\URL}[1]{\def\@URL{#1}}
+\newcommand{\DOI}[1]{\def\@DOI{#1}}
 %% for internal use
 \newcommand{\Seriesname}[1]{\def\@Seriesname{#1}}
 %\newcommand{\Pages}[1]{\def\@Pages{#1}}
@@ -152,6 +155,7 @@
 \Pages{xv + 123}
 \Price{USD 69.95 (P)}
 \URL{http://link/to/webpage/}
+	\DOI{10.17713/ajs.v000.i00}
 \if@article
   \Seriesname{Issue}
   \Hypersubject{Austrian Journal of Statistics}
@@ -241,11 +245,12 @@
     published by the Austrian Society of Statistics
     \hfill
     \url{http://www.osg.or.at/}\\[.3\baselineskip] \nopagebreak
-    {Volume~\@Volume%, \@Seriesname~\@Issue
+    {Volume~\@Volume , Issue~\@Issue%, \@Seriesname~\@Issue
     }
     \hfill
     \@Firstdate\\ \nopagebreak
-    {\@Month{} \@Year}
+    	    {\href{https://doi.org/\@DOI}{\tt doi:\@DOI}}
+    %{\@Month{} \@Year}
     \hfill
     \@Seconddate  \nopagebreak
     \vspace{.3\baselineskip}
@@ -268,8 +273,8 @@
 %   \center{
    {\fontfamily{phv} \fontsize{11}{13} \selectfont \href{http://www.ajs.or.at}{Austrian Journal of Statistics}}\\
   % \vfill
-   {\it \small \@Month{} \@Year, Volume~\@Volume, \@Pages. \\%, \@Seriesname~\@Issue. \\%
-            %\hfill 
+   {\it \small \@Month{} \@Year, Volume~\@Volume, Issue~\@Issue, \@Pages. \\%, \@Seriesname~\@Issue. \\%
+            %\hfill
             \href{http://www.ajs.or.at/}{http://www.ajs.or.at/}}
             %}
             \\[0.1cm] %\vspace{-3cm}
@@ -280,6 +285,16 @@
     \href{www.osg.or.at}{\includegraphics[width=0.2\textwidth]{oesg}} \\ \vfill
     }
     }
+% \def\@myoddhead{
+%   {\color{white} JSS}\\[-1.42cm]		  {\color{white} AJS}\\[-1.42cm]
+%   \hspace{-2em} \includegraphics[height=23mm,keepaspectratio]{jsslogo} \hfill		  \hspace{-2em} %\includegraphics[height=13mm,keepaspectratio]{jsslogo} \hfill
+%   \parbox[b][23mm]{118mm}{\hrule height 3pt		  \parbox[b][23mm]{118mm}{%\hrule height 3pt
+%    \center{		%   \center{
+%    {\fontfamily{pzc} \fontsize{28}{32} \selectfont Journal of Statistical Software}		   {\fontfamily{phv} \fontsize{11}{13} \selectfont \href{http://www.ajs.or.at}{Austrian Journal of Statistics}}\\
+%    \vfill		  % \vfill
+%    {\it \small \@Month{} \@Year, Volume~\@Volume, \@Seriesname~\@Issue.%		   {\it \small \@Month{} \@Year, Volume~\@Volume, \@Pages. \\%, \@Seriesname~\@Issue. \\%
+%             \hfill \href{https://doi.org/\@DOI}{doi:\,\@DOI}}}\\[0.1cm]		            %\hfill 
+%      \hrule height 3pt}}
 \if@review
   \renewcommand{\maketitle}{
   \if@nojss
@@ -485,6 +500,7 @@
   %% \AtBeginDocument{\maketitle}
 \else
   \AtBeginDocument{\maketitle}
+  %\@ifundefined{AddToHook}{\AtBeginDocument{\maketitle}}{\AddToHook{begindocument}[maketitle]{\maketitle}}
 \fi
 %% commands
 \newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
