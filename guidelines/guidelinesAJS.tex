@@ -236,6 +236,9 @@ Answer: Of course, you can do it. However, please clearly point out in the heade
 
 \end{enumerate}
 
+\section{Known issues}
+
+While in the documentclass arcticle a section header with special characters works without problems, e.g. \verb|\section{A \& B}|, this results in an error in the documentclass ajs. The solution is \verb|\section[A and B]{A \& B}|.
 
 
 %\bibliographystyle{plainat}
