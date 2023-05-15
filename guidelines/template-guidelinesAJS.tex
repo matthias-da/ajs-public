@@ -3,12 +3,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+ 
 %% almost as usual
-\author{Matthias Templ\,\orcidlink{0000-0002-8638-5276}\\ Zurich University of Applied Sciences \And 
+\author{Matthias Templ\,\orcidlink{0000-0002-8638-5276}\\ University of Applied Sciences and Arts \\ Northwestern Switzerland \And 
         Second Author\,\orcidlink{0000-0000-0000-0000}\\ Affiliation}
 %% \AND can be used instead of \And and starts a new line
-\title{Guidelines for Submitting a Manuscript to the Austrian Journal of Statistics}
+\title{Template and Guidelines for Submitting a Manuscript to the Austrian Journal of Statistics}
 
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Matthias Templ, Second Author} %% comma-separated
@@ -17,10 +17,11 @@
 
 %% an abstract and keywords
 \Abstract{
-This guidelines are tested for texlive 2020 and 2021. If you run into problems using ealier versions of texlive, please report to \email{matthias.templ@gmail.com}. 
+This guidelines are tested for new versions of texlive and current version of overleaf's LaTeX version. 
+%If you run into problems using ealier versions of texlive, please report to \email{matthias.templ@gmail.com}. 
 
-  This guide of the Austrian Journal of Statistics (AJS) shows the required style of manuscripts submitted to the Austrian Journal of Statistics. We strongly recommend
-to follow the given instructions exactly already when writing the paper. When submitting papers to AJS, it is essential to follow these guidelines. The present document can be used directly as a template. The file with the name \texttt{guidelinesAJS.tex} can be obtained from the following website \href{https://github.com/matthias-da/ajs-public}{https://github.com/matthias-da/ajs-public}.
+  This template and guide of the Austrian Journal of Statistics (AJS) shows the required style of manuscripts submitted to the Austrian Journal of Statistics. We strongly recommend
+to follow the given instructions exactly already when writing the paper. When submitting papers to AJS, it is essential to follow these guidelines. The present document can be used directly as a template. The file with the name \texttt{guidelinesAJS.tex} can be obtained from the following website \href{https://github.com/matthias-da/ajs-public}{https://github.com/matthias-da/ajs-public}, or directly as overleaf template in their academic journal section. 
 
 Manuscripts submitted without consideration of the AJS style guide will most likely not be forwarded for review, but rejected with the possibility of resubmission.
 }
@@ -44,10 +45,10 @@ Manuscripts submitted without consideration of the AJS style guide will most lik
 \Address{
   Matthias Templ\\
   Institue of Data Analysis and Process Design\\
-  Zurich University of Applied Sciences\\
-  CH-8400 Winterthur, Switzerland\\
+  University of Applied Sciences and Arts Northwestern Switzerland\\
+  CH-4600 Olten, Switzerland\\
   E-mail: \email{matthias.templ@gmail.com}\\
-  URL: \url{https://www.zhaw.ch/de/ueber-uns/person/teml/}
+  URL: \url{https://www.fhnw.ch/de/personen/matthias-templ}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -66,18 +67,29 @@ Manuscripts submitted without consideration of the AJS style guide will most lik
 
 Before we look at style in more detail, the most common mistakes and errors are described:
 
-\section{Frequently made mistakes}
+\section{Comments on frequently made mistakes and concerns}
 
+To avoid a reject in first place:
 
-\begin{itemize}
-\item Title in Capitalized Style. See the title of the guidelines for illustration.
-\item Subsection in lower case style. See the subsection of the guidelines for illustration
-\item Captialized Title for references. E.g. \cite{fleet20} should appear in the reference list as ``Fleet Management in Free-Floating Bike Sharing Systems Using
+\begin{description}
+\item[C1.word] Do not submit articles written with prohibited software like Microsoft Word or similar WYSWYG software. We like to send your manuscript with the AJS style to reviewers. 
+\item[C1.conclusion] Write a conclusion and/or discussion discussing your results.  Discuss how your method improved science and give value to the community, and discuss differences to other alternative methods. 
+\item[C1.data.documentation] Give sufficient documentation on data you are using.
+\item[C1.application] In case you have numerical examples, use convincing applications and interesting data. Do not use \texttt{toy} data with 50 observations and no explanatory variables / covariables, for example. 
+\end{description}
+
+To do justice to the style from the very beginning:
+
+\begin{description}
+\item[C2.title] Title in Capitalized Style. See the title of the guidelines for illustration.
+\item[C2.subsections]  Subsection in lower case style. See the subsection of the guidelines for illustration
+\item[C2.references]  Captialized Title for references. E.g. \cite{fleet20} should appear in the reference list as ``Fleet Management in Free-Floating Bike Sharing Systems Using
   Predictive Modelling and Explorative Tools.'' and NOT as ``Fleet management in free-floating bike sharing systems using
   predictive modelling and explorative tools.''.
-\item Include DOI numbers for each citation (if possible)
-\item Use vector-based graphics such as \texttt{pdf}. Do not use pixel-based graphics like \texttt{png}, \texttt{jpeg}, and do not convert from \texttt{png} or \texttt{jpeg} to \texttt{pdf}
-\end{itemize}
+\item[C2.doi]  Include DOI numbers for each citation (if possible)
+\item[C2.graphics]  Use vector-based graphics such as \texttt{pdf}. Do not use pixel-based graphics like \texttt{png}, \texttt{jpeg}, and do not convert from \texttt{png} or \texttt{jpeg} to \texttt{pdf}
+\item{C2.tables} Produce tables in \LaTeX{}. (no screenshots)
+\end{description}
 
 \section{Introduction}
 
@@ -87,7 +99,7 @@ The style file of the Austrian Journal of Statsitics is based on the style file 
 The Austrian Journal of Statistics is freely available over the net. Free and open-source tools used for production of your manuscript are therefore also highly supported. Code to reproduce the figures and tables in manuscripts as well as methods implemented in software can be published as supplementary material. This increases usually the number of 
 downloads of your article.
 
-After review, final sources can also be sent as \texttt{Sweave} \citep[see, e.g.,][]{leisch02} or \texttt{knitr} \citep{yihui13} .Rnw files.
+After review, final sources can also be sent as \texttt{knitr} \citep{knitr} .Rnw file.
 
 %Graphics should be inserted as PostScript files using the
 %package {\tt psfig} or {\tt graphicx}. Bibliographic references
@@ -97,13 +109,19 @@ After review, final sources can also be sent as \texttt{Sweave} \citep[see, e.g.
 
 \section{Writing your manuscript}
 
-The Journal is produced on the basis of computer readable
-manuscripts provided by the authors. 
-
-
 In order to obtain a uniform layout and to ease the production as
 much as possible it is highly recommended to use \LaTeXe\ for the
 text processing. 
+
+
+Technically, you have three possibilities to choose the software for writing your manuscript:
+
+- Select from the overleaf template for academic journals the template for the Austrian Journal of Statistics.
+- Download the template from \href{https://github.com/matthias-da/ajs-public}{https://github.com/matthias-da/ajs-public}
+- use the R package \texttt{rtcles}, function \texttt{ajs\_article}.
+- use the overleaf template for the Austrian Journal of Statistics, found online at \href{https://www.overleaf.com/latex/templates/tagged/academic-journal}{https://www.overleaf.com/latex/templates/tagged/academic-journal}
+
+
 
 Each article must have a summary in English which
 inform the reader quickly on the contents and the substantial
@@ -116,14 +134,14 @@ the production. Footnotes should be avoided.
 
 The article should be structured by enumerated sections and
 subsections. The title should be in title case style, sections and subsections in section case style. Graphics and tables must contain captions, above
-tables and below graphics (figures). Examples are (see Figure~\ref{Fig3.4} and Table~\ref{Tab3.4}).
+tables and below graphics (figures). Examples are (see Figure~\ref{fig:Fig3.4} and Table~\ref{Tab3.4}).
 Graphics \textbf{should be produced in \textbf{pdf} format} and included 
  at suitable places of the manuscript. 
 
 \begin{figure}[hbt]
 \begin{center}
 \includegraphics{ajs-download20180210}
-\caption{\label{Fig3.4}Download statistics of articles per month at the Austrian Journal of Statistics.} 
+\caption{\label{fig:Fig3.4}Download statistics of articles per month at the Austrian Journal of Statistics.}  
 \end{center}
 \end{figure}
 
@@ -167,9 +185,9 @@ Please consider
 
 
 Cited literature should be summarized at the end of the article in
-form of a non-enumerated section. \cite{leisch02} is a reference
+form of a non-enumerated section. \cite{knitr} is a reference
 to an article. If the citation is in parentheses, it
-should look like \citep{leisch02}.
+should look like \citep{knitr}. The latter verison is used for indirect citations while the first one to directly cite an article.
 References should be in title case.
 
 Correspondence addresses of author(s) should be added at the end
@@ -242,7 +260,7 @@ While in the documentclass arcticle a section header with special characters wor
 
 
 %\bibliographystyle{plainat}
-\bibliography{guidelinesAJS}
+\bibliography{template-guidelinesAJS}
 
 
 
