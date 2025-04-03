@@ -516,7 +516,7 @@
   \newcommand\@doi[1]{doi:\discretionary{}{}{}#1}\else
   \newcommand\@doi{doi:\discretionary{}{}{}\begingroup
 \urlstyle{tt}\Url}\fi
-\newcommand{\doi}[1]{\href{http://dx.doi.org/#1}{\normalfont\texttt{\@doi{#1}}}}
+\newcommand{\doi}[1]{\href{https://www.doi.org/#1}{\normalfont\texttt{\@doi{#1}}}}
 \newcommand{\E}{\mathsf{E}}
 \newcommand{\VAR}{\mathsf{VAR}}
 \newcommand{\COV}{\mathsf{COV}}
